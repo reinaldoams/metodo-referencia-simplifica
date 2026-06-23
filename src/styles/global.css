@@ -1,0 +1,52 @@
+@import 'tailwindcss';
+
+@theme {
+	--color-music-bg: #282a36;
+	--color-music-surface: #21222c;
+	--color-music-text: #f8f8f2;
+	--color-music-muted: #f8f8f2;
+	--color-music-accent: #bd93f9;
+	--color-music-accent-hover: #ff79c6;
+	--color-music-h1: #bd93f9;
+	--color-music-h2: #8be9fd;
+	--color-music-h3: #50fa7b;
+	--color-music-h4: #f1fa8c;
+	--color-music-on-accent: #282a36;
+	--font-serif: Georgia, 'Times New Roman', serif;
+}
+
+@layer base {
+	body {
+		@apply min-h-full bg-music-bg text-music-text font-sans leading-relaxed;
+		background-image: repeating-linear-gradient(
+			to bottom,
+			transparent,
+			transparent 23px,
+			rgba(189, 147, 249, 0.04) 23px,
+			rgba(189, 147, 249, 0.04) 24px
+		);
+	}
+
+	h1,
+	h2,
+	h3,
+	h4 {
+		@apply font-serif font-normal;
+	}
+
+	h1 {
+		@apply text-music-h1;
+	}
+
+	h2 {
+		@apply text-music-h2;
+	}
+
+	h3 {
+		@apply text-music-h3;
+	}
+
+	h4 {
+		@apply text-music-h4;
+	}
+}

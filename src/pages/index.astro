@@ -1,11 +1,276 @@
 ---
-import Welcome from '../components/Welcome.astro';
 import Layout from '../layouts/Layout.astro';
+import PixDonation from '../components/PixDonation.tsx';
+import { PIX_KEY } from '../data/donation';
+import { generatePixQrDataUrl } from '../lib/pix-qr';
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+const pixQrDataUrl = await generatePixQrDataUrl();
+
+const pillars = [
+	{
+		icon: '♩',
+		title: 'Referências, não decoreba',
+		description:
+			'O MRS organiza a teoria em referências visuais e lógicas que reduzem o volume de informação a memorizar. Em vez de acumular regras soltas, você aprende atalhos que se conectam entre si.',
+	},
+	{
+		icon: '⚡',
+		title: 'Velocidade antes da perfeição',
+		description:
+			'A abordagem é não ortodoxa: o objetivo inicial é decorar rápido o suficiente para que, na prática, tudo se torne natural — no instrumento, na improvisação, na leitura.',
+	},
+	{
+		icon: '🎸',
+		title: 'Pensado para cordas',
+		description:
+			'Muitos exemplos aparecem em tablaturas de instrumentos de corda. Os desenhos de escala maior e o mapa de notas no braço foram pensados para quem aprende tocando.',
+	},
+];
+
+const pages = [
+	{
+		href: '/metodo-referencia-simplifica',
+		label: 'Método Referência Simplifica',
+		tag: 'Leitura completa',
+		description:
+			'Um texto do início ao fim explicando todo o método: a lógica das referências, a ordem de estudo e como encaixar cada peça na sua prática diária.',
+	},
+	{
+		href: '/encontrador-de-notas',
+		label: 'Encontrador de notas',
+		tag: 'Ferramenta visual',
+		description:
+			'Ilustrações interativas para localizar notas no braço do instrumento. É o ponto de partida que orienta como você vai navegar o fretboard usando o MRS.',
+	},
+	{
+		href: '/encontrador-de-escalas-do-metodo',
+		label: 'Encontrador de escalas do método',
+		tag: 'Escalas com o MRS',
+		description:
+			'Como encontrar escalas utilizando o método — de forma livre, sem amarrar a um instrumento específico, e também adaptada para instrumentos de corda.',
+	},
+];
 ---
 
-<Layout>
-	<Welcome />
+<Layout title="Início" wide>
+	<section
+		class="relative overflow-hidden rounded-2xl border border-music-accent/25 bg-music-surface px-8 py-14 text-center md:px-14 md:py-20"
+	>
+		<div
+			class="pointer-events-none absolute inset-0 opacity-[0.07]"
+			aria-hidden="true"
+		>
+			<svg class="h-full w-full" viewBox="0 0 800 400" preserveAspectRatio="xMidYMid slice">
+				<line x1="0" y1="80" x2="800" y2="80" stroke="currentColor" stroke-width="1" />
+				<line x1="0" y1="120" x2="800" y2="120" stroke="currentColor" stroke-width="1" />
+				<line x1="0" y1="160" x2="800" y2="160" stroke="currentColor" stroke-width="1" />
+				<line x1="0" y1="200" x2="800" y2="200" stroke="currentColor" stroke-width="1" />
+				<line x1="0" y1="240" x2="800" y2="240" stroke="currentColor" stroke-width="1" />
+				<ellipse cx="180" cy="200" rx="14" ry="10" fill="currentColor" />
+				<ellipse cx="320" cy="160" rx="14" ry="10" fill="currentColor" />
+				<ellipse cx="460" cy="120" rx="14" ry="10" fill="currentColor" />
+				<ellipse cx="600" cy="160" rx="14" ry="10" fill="currentColor" />
+			</svg>
+		</div>
+
+		<p class="relative mb-3 font-medium tracking-widest text-music-text uppercase">
+			Teoria musical · Abordagem prática
+		</p>
+		<h1 class="relative mb-4 leading-tight">
+			Método Referência Simplifica
+		</h1>
+		<p class="relative mx-auto mb-2 max-w-2xl text-music-muted">
+			<span class="font-medium text-music-text">MRS</span> — um caminho para aprender teoria
+			musical com menos informação para decorar e mais clareza na hora de tocar.
+		</p>
+		<p class="relative mx-auto max-w-xl text-music-muted">
+			Referências visuais, tablaturas e mapas de escala que aceleram a memorização até ela
+			se tornar instinto no instrumento.
+		</p>
+
+		<div class="relative mt-10 flex flex-wrap justify-center gap-4">
+			<a
+				href="/metodo-referencia-simplifica"
+				class="rounded-lg bg-music-accent px-6 py-3 font-medium text-music-on-accent no-underline transition-colors hover:bg-music-accent-hover"
+			>
+				Conhecer o método
+			</a>
+			<a
+				href="/encontrador-de-notas"
+				class="rounded-lg border border-music-accent/50 px-6 py-3 font-medium text-music-text no-underline transition-colors hover:border-music-accent hover:bg-music-accent/10"
+			>
+				Explorar notas no braço
+			</a>
+		</div>
+	</section>	
+
+	<section class="mt-20">
+		<div class="mb-10 max-w-2xl">
+			<h2 class="mb-3 text-2xl md:text-3xl">
+				O que é o MRS?
+			</h2>
+			<p class="text-music-muted">
+				O <strong class="font-medium text-music-text">Método Referência Simplifica</strong> parte
+				de uma ideia simples: em vez de acumular dezenas de regras isoladas, você aprende
+				<strong class="font-medium text-music-text">referências</strong> que funcionam como
+				âncoras — pontos fixos a partir dos quais deduz o resto com rapidez.
+			</p>
+		</div>
+
+		<div class="grid gap-6 md:grid-cols-3">
+			{
+				pillars.map((pillar) => (
+					<article class="rounded-xl border border-white/5 bg-music-surface/60 p-6 transition-colors hover:border-music-accent/30">
+						<span class="mb-4 block text-3xl" aria-hidden="true">
+							{pillar.icon}
+						</span>
+						<h3 class="mb-2 font-sans leading-relaxed">{pillar.title}</h3>
+						<p class="leading-relaxed text-music-muted">{pillar.description}</p>
+					</article>
+				))
+			}
+		</div>
+	</section>
+
+	<section class="mt-20 rounded-2xl border border-white/5 bg-music-surface/40 p-8 md:p-10">
+		<h2 class="mb-3 text-2xl md:text-3xl">
+			Como funciona na prática
+		</h2>
+		<p class="mb-8 max-w-3xl text-music-muted">
+			O método não segue a ordem tradicional dos conservatórios. A prioridade é
+			<strong class="font-medium text-music-text">decorar rápido</strong> o essencial — escalas,
+			notas, intervalos — para que, depois, na execução, você não precise pensar: apenas toque.
+		</p>
+
+		<div class="grid gap-8 md:grid-cols-2">
+			<div class="rounded-xl border border-music-accent/20 bg-music-bg/50 p-6">
+				<h3 class="mb-3 flex items-center gap-2 font-sans leading-relaxed">
+					<span class="text-music-text" aria-hidden="true">▸</span>
+					Tablaturas e cordas
+				</h3>
+				<p class="leading-relaxed text-music-muted">
+					Grande parte dos exemplos usa tablaturas de instrumentos de corda — violão,
+					baixo, cavaquinho e similares. Assim, cada conceito teórico já aparece onde
+					você realmente vai usá-lo: nos trastes.
+				</p>
+			</div>
+
+			<div class="rounded-xl border border-music-accent/20 bg-music-bg/50 p-6">
+				<h3 class="mb-3 flex items-center gap-2 font-sans leading-relaxed">
+					<span class="text-music-text" aria-hidden="true">▸</span>
+					Desenhos de escala maior
+				</h3>
+				<p class="leading-relaxed text-music-muted">
+					Os padrões visuais da escala maior são uma das ferramentas centrais do MRS.
+					Decorar o desenho no braço é mais rápido do que memorizar fórmulas abstratas —
+					e funciona em qualquer tonalidade.
+				</p>
+			</div>
+
+			<div class="rounded-xl border border-music-accent/20 bg-music-bg/50 p-6 md:col-span-2">
+				<h3 class="mb-3 flex items-center gap-2 font-sans leading-relaxed">
+					<span class="text-music-text" aria-hidden="true">▸</span>
+					Encontrador de notas
+				</h3>
+				<p class="leading-relaxed text-music-muted">
+					Antes de avançar para escalas e harmonias, o MRS ensina a
+					<strong class="font-medium text-music-text">localizar notas no braço</strong>.
+					A página Encontrador de notas ilustra esse processo passo a passo — é a base
+					visual que direciona todo o restante do estudo.
+				</p>
+				<a
+					href="/encontrador-de-notas"
+					class="mt-4 inline-block font-medium text-music-text no-underline hover:text-music-text"
+				>
+					Ir para o Encontrador de notas →
+				</a>
+			</div>
+		</div>
+	</section>
+
+	<section class="mt-20">
+		<h2 class="mb-3 text-2xl md:text-3xl">
+			Como o site está organizado
+		</h2>
+		<p class="mb-10 max-w-2xl text-music-muted">
+			Cada seção do site cobre uma parte do caminho. Comece pelo método completo ou vá
+			direto às ferramentas — o MRS foi pensado para ser consultado na ordem que fizer
+			mais sentido para você.
+		</p>
+
+		<div class="grid gap-6 md:grid-cols-3">
+			{
+				pages.map((page) => (
+					<a
+						href={page.href}
+						class="group flex flex-col rounded-xl border border-white/5 bg-music-surface p-6 no-underline transition-all hover:-translate-y-0.5 hover:border-music-accent/40 hover:shadow-lg hover:shadow-music-accent/5"
+					>
+						<span class="mb-3 inline-block w-fit rounded-full bg-music-accent/15 px-3 py-1 font-medium tracking-wide text-music-text uppercase">
+							{page.tag}
+						</span>
+						<h3 class="mb-2 font-sans leading-relaxed transition-colors group-hover:text-music-h3">
+							{page.label}
+						</h3>
+						<p class="flex-1 leading-relaxed text-music-muted">{page.description}</p>
+						<span class="mt-4 font-medium text-music-text opacity-0 transition-opacity group-hover:opacity-100">
+							Acessar →
+						</span>
+					</a>
+				))
+			}
+		</div>
+	</section>
+
+	<section class="mt-12 rounded-2xl border border-music-accent/20 bg-music-surface/40 px-8 py-10 md:px-10">
+		<div class="mx-auto max-w-2xl text-center">
+			<h2 class="mb-3 text-2xl md:text-3xl">Totalmente gratuito</h2>
+			<p class="text-music-muted">
+				Todo o conteúdo deste site é <strong class="font-medium text-music-text">100% gratuito</strong>.
+				O MRS é um projeto sem fins lucrativos, feito para ajudar quem quer aprender teoria
+				musical de forma prática — sem paywall, sem cadastro, sem pegadinha.
+			</p>
+			<p class="mt-4 text-music-muted">
+				Se o material te ajudou e você quiser apoiar o projeto, ficarei muito grato.
+			</p>
+			<details class="group mt-6 text-center">
+				<summary
+					class="inline-flex cursor-pointer list-none items-center justify-center gap-2 rounded-lg border border-music-accent/50 bg-music-bg/40 px-6 py-3 font-medium text-music-text shadow-sm transition-all hover:border-music-accent hover:bg-music-accent/10 hover:shadow-md active:scale-[0.98] group-open:border-music-accent group-open:bg-music-accent/15 [&::-webkit-details-marker]:hidden"
+				>
+					Apoiar o projeto via Pix
+					<svg
+						class="size-7 shrink-0 text-music-accent transition-transform group-open:rotate-180"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2.5"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						aria-hidden="true"
+					>
+						<path d="M6 9l6 6 6-6" />
+					</svg>
+				</summary>
+				<PixDonation client:visible pixKey={PIX_KEY} qrDataUrl={pixQrDataUrl} />
+			</details>
+		</div>
+	</section>
+
+	<section
+		class="mt-20 rounded-2xl border border-music-accent/30 bg-linear-to-br from-music-surface to-music-bg px-8 py-12 text-center md:px-14"
+	>
+		<p class="mb-2 text-4xl text-music-text/60" aria-hidden="true">♫</p>
+		<h2 class="mb-3 text-2xl md:text-3xl">
+			Pronto para começar?
+		</h2>
+		<p class="mx-auto mb-8 max-w-lg text-music-muted">
+			Leia o método do início ao fim ou explore as ferramentas visuais. O objetivo é o
+			mesmo: fazer a teoria musical virar memória muscular o mais rápido possível.
+		</p>
+		<a
+			href="/metodo-referencia-simplifica"
+			class="inline-block rounded-lg bg-music-accent px-8 py-3 font-medium text-music-on-accent no-underline transition-colors hover:bg-music-accent-hover"
+		>
+			Ler o método completo
+		</a>
+	</section>
 </Layout>

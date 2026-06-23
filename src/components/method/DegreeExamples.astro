@@ -1,0 +1,59 @@
+---
+import MethodSection from './MethodSection.astro';
+
+const examples = [
+	{
+		note: 'Lá',
+		result: 'Mi',
+		degree: '5.º grau',
+		description:
+			'Encaixe o desenho na nota Lá e observe: o quinto grau da escala será Mi — a quinta justa da tonalidade.',
+	},
+	{
+		note: 'Ré',
+		result: 'Fá♯',
+		degree: '3.º grau',
+		description:
+			'Encaixe o desenho na nota Ré e o terceiro grau será Fá sustenido — a terça maior que define a sonoridade maior.',
+	},
+	{
+		note: 'Dó',
+		result: 'Si',
+		degree: '7.º grau',
+		description:
+			'Encaixe o desenho na nota Dó e o sétimo grau será Si — a sétima maior, um semitom abaixo da tônica.',
+	},
+];
+---
+
+<MethodSection
+	title="Encontre os graus manualmente"
+	subtitle="Com o desenho da escala maior, você já consegue localizar qualquer grau em qualquer tonalidade."
+>
+	<p class="mb-8 w-full text-music-muted">
+		Encorajamos você a praticar encaixando o desenho sobre diferentes notas e identificando os
+		graus. Três exemplos para começar:
+	</p>
+
+	<div class="grid w-full gap-4 md:grid-cols-3">
+		{
+			examples.map((ex) => (
+				<article class="rounded-xl border border-white/10 bg-music-surface/50 p-6 md:p-8">
+					<div class="mb-4 flex items-center gap-4">
+						<span class="flex size-14 items-center justify-center rounded-full bg-music-accent font-serif text-2xl text-music-on-accent md:size-16 md:text-3xl">
+							{ex.note.charAt(0)}
+						</span>
+						<div>
+							<p class="text-lg font-semibold text-music-text md:text-xl">Tônica: {ex.note}</p>
+							<p class="text-base text-music-text md:text-lg">{ex.degree}</p>
+						</div>
+					</div>
+					<p class="text-base leading-relaxed text-music-muted md:text-lg">{ex.description}</p>
+					<p class="mt-4 rounded-lg bg-music-bg/50 px-4 py-3 text-center text-base font-medium text-music-text md:text-lg">
+						{ex.degree} = <span class="text-music-text">{ex.result}</span>
+					</p>
+				</article>
+			))
+		}
+	</div>
+</MethodSection>

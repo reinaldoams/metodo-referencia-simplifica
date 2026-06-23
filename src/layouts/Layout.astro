@@ -1,23 +1,32 @@
+---
+import Navbar from '../components/Navbar';
+import '../styles/global.css';
+
+interface Props {
+	title: string;
+	wide?: boolean;
+}
+
+const { title, wide = false } = Astro.props;
+
+const mainClass = wide
+	? 'mx-auto max-w-6xl px-6 py-10 pb-16 text-lg leading-relaxed md:text-xl [&_h1]:m-0 [&_h1]:text-5xl [&_h1]:leading-tight md:[&_h1]:text-6xl'
+	: 'mx-auto max-w-3xl px-6 py-10 pb-16 [&_h1]:m-0 [&_h1]:text-3xl';
+---
+
 <!doctype html>
-<html lang="en">
+<html lang="pt-BR">
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
 		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
+		<title>{title} · Método Referência Simplifica</title>
 	</head>
 	<body>
-		<slot />
+		<Navbar />
+		<main class={mainClass}>
+			<slot />
+		</main>
 	</body>
 </html>
-
-<style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-	}
-</style>
