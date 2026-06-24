@@ -100,20 +100,30 @@ function intervalFromRoot(stringIndex: number, fret: number, root: { stringIndex
 	return (notePc - rootPc + 12) % 12;
 }
 
-/** Garante que casas em Si/Mi agudo pertencem à escala maior da tônica. */
-function snapFretToScale(
+/** Localiza a casa cuja altura corresponde ao intervalo desejado, preferindo a mais próxima da posição esperada. */
+function findFretForInterval(
 	stringIndex: number,
-	fret: number,
+	interval: number,
 	root: { stringIndex: number; fret: number },
+	preferredFret: number,
+	maxFret = 12,
 ): number {
-	for (const delta of [0, -1, 1, -2, 2]) {
-		const candidate = fret + delta;
-		if (candidate < 0 || candidate > 12) continue;
-		if (MAJOR_INTERVALS.includes(intervalFromRoot(stringIndex, candidate, root))) {
-			return candidate;
+	const rootPc = pitchClassFromPosition(root.stringIndex, root.fret);
+	const targetPc = (rootPc + interval) % 12;
+
+	let best = preferredFret;
+	let bestDist = Infinity;
+
+	for (let f = 0; f <= maxFret; f++) {
+		if (pitchClassFromPosition(stringIndex, f) !== targetPc) continue;
+		const dist = Math.abs(f - preferredFret);
+		if (dist < bestDist) {
+			bestDist = dist;
+			best = f;
 		}
 	}
-	return fret;
+
+	return best;
 }
 
 function assignScaleDegrees(
@@ -135,20 +145,22 @@ export function getPatternDotsAtRoot(
 	const dString = root.stringIndex - pattern.defaultRoot.stringIndex;
 	const dFret = root.fret - pattern.defaultRoot.fret;
 
-	const moved = pattern.dots.map((dot) => {
+	const moved: Omit<PatternDot, 'degree'>[] = [];
+
+	for (const dot of pattern.dots) {
 		const newString = dot.stringIndex + dString;
+		if (newString < 0 || newString > 5) continue;
+
+		const interval = intervalFromRoot(dot.stringIndex, dot.fret, pattern.defaultRoot);
 		const crossingAdj = gBCrossingFretAdjustment(dot.stringIndex, newString);
-		let newFret = dot.fret + dFret + crossingAdj;
+		const preferredFret = dot.fret + dFret + crossingAdj;
+		const newFret = findFretForInterval(newString, interval, root, preferredFret);
 
-		if (newString <= B_STRING) {
-			newFret = snapFretToScale(newString, newFret, root);
-		}
-
-		return {
+		moved.push({
 			stringIndex: newString,
 			fret: newFret,
-		};
-	});
+		});
+	}
 
 	return assignScaleDegrees(moved, root);
 }

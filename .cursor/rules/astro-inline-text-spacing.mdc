@@ -1,0 +1,39 @@
+---
+description: Espaçamento de texto com tags inline em Astro/JSX
+globs: "**/*.{astro,tsx}"
+alwaysApply: false
+---
+
+# Espaçamento com `<strong>`, `<em>` e `<a>`
+
+No Astro (e em JSX), **quebras de linha entre texto e tags inline removem o espaço** entre palavras. O resultado vira `aprendereferências` ou `OEncontrador`.
+
+## Faça
+
+Mantenha o texto e a tag **na mesma linha**, com espaço normal fora da tag:
+
+```astro
+<!-- ✅ -->
+você aprende <strong class="text-music-text">referências</strong> que funcionam
+O <a href="/encontrador-de-notas">Encontrador de notas</a> ilustra esse processo.
+```
+
+## Não faça
+
+```astro
+<!-- ❌ quebra de linha antes da tag -->
+você aprende
+<strong>referências</strong>
+
+<!-- ❌ espaço artificial dentro da tag -->
+<strong> referências</strong>
+
+<!-- ❌ {' '} espalhado no meio do parágrafo -->
+você aprende{' '}<strong>referências</strong>
+```
+
+## Regra prática
+
+- Espaço **antes** do destaque: fica no texto, imediatamente antes de `<strong>` / `<a>` na mesma linha.
+- Espaço **depois** do destaque: fica no texto, imediatamente depois de `</strong>` / `</a>` na mesma linha.
+- Nunca use espaço no início ou no fim do conteúdo dentro de `<strong>`, `<em>` ou `<a>` só para “consertar” o layout.

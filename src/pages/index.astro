@@ -2,9 +2,6 @@
 import Layout from '../layouts/Layout.astro';
 import PixDonation from '../components/PixDonation.tsx';
 import { PIX_KEY } from '../data/donation';
-import { generatePixQrDataUrl } from '../lib/pix-qr';
-
-const pixQrDataUrl = await generatePixQrDataUrl();
 
 const pillars = [
 	{
@@ -40,14 +37,14 @@ const pages = [
 		label: 'Encontrador de notas',
 		tag: 'Ferramenta visual',
 		description:
-			'Ilustrações interativas para localizar notas no braço do instrumento. É o ponto de partida que orienta como você vai navegar o fretboard usando o MRS.',
+			'Ilustrações interativas para localizar notas no braço do instrumento. É o ponto de partida que orienta como você vai navegar pelo braço usando o MRS.',
 	},
 	{
 		href: '/encontrador-de-escalas-do-metodo',
 		label: 'Encontrador de escalas do método',
 		tag: 'Escalas com o MRS',
 		description:
-			'Como encontrar escalas utilizando o método — de forma livre, sem amarrar a um instrumento específico, e também adaptada para instrumentos de corda.',
+			'Como encontrar escalas com o método — com uma versão adaptada a instrumentos de corda e os modos gregos de cada tônica.',
 	},
 ];
 ---
@@ -85,7 +82,7 @@ const pages = [
 		</p>
 		<p class="relative mx-auto max-w-xl text-music-muted">
 			Referências visuais, tablaturas e mapas de escala que aceleram a memorização até ela
-			se tornar instinto no instrumento.
+			se tornar um instinto no instrumento.
 		</p>
 
 		<div class="relative mt-10 flex flex-wrap justify-center gap-4">
@@ -111,8 +108,7 @@ const pages = [
 			</h2>
 			<p class="text-music-muted">
 				O <strong class="font-medium text-music-text">Método Referência Simplifica</strong> parte
-				de uma ideia simples: em vez de acumular dezenas de regras isoladas, você aprende
-				<strong class="font-medium text-music-text">referências</strong> que funcionam como
+				de uma ideia simples: em vez de acumular dezenas de regras isoladas, você aprende <strong class="font-medium text-music-text">referências</strong> que funcionam como
 				âncoras — pontos fixos a partir dos quais deduz o resto com rapidez.
 			</p>
 		</div>
@@ -137,9 +133,8 @@ const pages = [
 			Como funciona na prática
 		</h2>
 		<p class="mb-8 max-w-3xl text-music-muted">
-			O método não segue a ordem tradicional dos conservatórios. A prioridade é
-			<strong class="font-medium text-music-text">decorar rápido</strong> o essencial — escalas,
-			notas, intervalos — para que, depois, na execução, você não precise pensar: apenas toque.
+			O método não segue a ordem tradicional dos conservatórios. A prioridade é <strong class="font-medium text-music-text">decorar rápido</strong> o essencial — escalas,
+			notas, intervalos — para que, depois, na execução, você não precise pensar: é só tocar.
 		</p>
 
 		<div class="grid gap-8 md:grid-cols-2">
@@ -173,8 +168,7 @@ const pages = [
 					Encontrador de notas
 				</h3>
 				<p class="leading-relaxed text-music-muted">
-					Antes de avançar para escalas e harmonias, o MRS ensina a
-					<strong class="font-medium text-music-text">localizar notas no braço</strong>.
+					Antes de avançar para escalas e harmonias, o MRS ensina a <strong class="font-medium text-music-text">localizar notas no braço</strong>.
 					A página Encontrador de notas ilustra esse processo passo a passo — é a base
 					visual que direciona todo o restante do estudo.
 				</p>
@@ -250,7 +244,7 @@ const pages = [
 						<path d="M6 9l6 6 6-6" />
 					</svg>
 				</summary>
-				<PixDonation client:visible pixKey={PIX_KEY} qrDataUrl={pixQrDataUrl} />
+				<PixDonation client:only="solid-js" pixKey={PIX_KEY} />
 			</details>
 		</div>
 	</section>

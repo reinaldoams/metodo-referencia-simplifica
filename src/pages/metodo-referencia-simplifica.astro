@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import PageLink from '../components/PageLink.astro';
 import MethodSection from '../components/method/MethodSection.astro';
 import MajorScaleExplorer from '../components/method/MajorScaleExplorer';
 import DegreeExamples from '../components/method/DegreeExamples.astro';
@@ -11,11 +12,16 @@ import GreekModesSection from '../components/method/GreekModesSection.astro';
 	<header class="mb-16 w-full">
 		<h1>Método Referência Simplifica</h1>
 		<p class="mt-6 text-music-muted">
+			Antes de começar a ler sobre o método, é interessante já saber encontrar as notas no
+			braço do instrumento.
+		</p>
+		<PageLink href="/encontrador-de-notas" label="Ir para o Encontrador de notas" />
+		<p class="mt-6 text-music-muted">
 			A base do MRS é a <strong class="text-music-text">escala maior</strong>. O objetivo
-			deste método é fazer você entender rapidamente como encontrar todos os{' '}
-			<strong class="text-music-text">modos gregos</strong> — e, portanto, a escala menor
-			também, que é o sexto modo grego — a partir da escala maior, compreendendo como a
-			referência de qual nota é o tom da música muda o nome que a mesma escala maior recebe.
+			deste método é fazer você entender rapidamente como encontrar todos os <strong class="text-music-text">modos gregos</strong> — e, portanto, a escala menor
+			também, que é o sexto modo grego — a partir da escala maior, compreendendo que mudar
+			qual nota você trata como tônica (o tom da música) altera o nome que essa mesma
+			escala recebe.
 		</p>
 	</header>
 
@@ -25,8 +31,7 @@ import GreekModesSection from '../components/method/GreekModesSection.astro';
 	>
 		<div class="w-full space-y-5 text-music-muted">
 			<p>
-				Não precisamos decorar nomes como Dórico ou Mixolídio agora. O MRS prioriza
-				<strong class="text-music-text"> referências visuais</strong> e a lógica dos graus.
+				Não precisamos decorar nomes como Dórico ou Mixolídio agora. O MRS prioriza <strong class="text-music-text">referências visuais</strong> e a lógica dos graus.
 				Primeiro você aprende <em>onde</em> estão as notas; os nomes vêm depois, quando já
 				faz sentido.
 			</p>
@@ -52,6 +57,12 @@ import GreekModesSection from '../components/method/GreekModesSection.astro';
 			<p>
 				Alterne entre os dois desenhos e arraste o grau 1 para experimentar diferentes
 				tonalidades. O braço abaixo inicia em <strong class="text-music-text">Sol maior</strong>.
+			</p>
+			<p>
+				Observe também como o desenho se altera nas duas cordas mais agudas — Si e Mi agudo —
+				quando você arrasta a tônica para começar a escala a partir de cordas mais agudas.
+				A afinação em terça entre Sol e Si exige esse ajuste de uma casa; é o mesmo detalhe
+				que aparece no Encontrador de notas.
 			</p>
 		</div>
 

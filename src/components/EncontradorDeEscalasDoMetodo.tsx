@@ -54,7 +54,7 @@ export default function EncontradorDeEscalasDoMetodo() {
 					<span class="font-medium text-music-text">
 						{noteToPtLabel(explorer.tonicName())} maior
 					</span>
-					 — muda apenas qual grau você trata como tônica.
+					— muda apenas qual grau você trata como tônica.
 				</p>
 
 				<div class="grid gap-5 lg:grid-cols-2">

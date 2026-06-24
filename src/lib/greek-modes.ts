@@ -64,7 +64,7 @@ export const GREEK_MODES: readonly GreekModeDefinition[] = [
 	{
 		number: 5,
 		name: 'Mixolídio',
-		adjective: 'Mixolídio',
+		adjective: 'Mixolidiano',
 		ordinalLabel: 'quinto modo grego',
 		aliases: ['Escala mixolídia', 'Mixolydian'],
 		intervals: [0, 2, 4, 5, 7, 9, 10],

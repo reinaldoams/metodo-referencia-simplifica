@@ -39,10 +39,10 @@ const DIAGRAMS: Record<InstrumentId, Record<DiagramType, PositionDiagramConfig>>
 		},
 		tuning: {
 			frets: 8,
-			start: { s: 1, f: 0, label: '1' },
-			end: { s: 2, f: 5, label: '2' },
-			caption: 'Si solto → Sol casa 5 (afinação: −5 casas na corda abaixo)',
-			captionNote: 'Como ao afinar: casa 5 = corda solta de baixo',
+			start: { s: 2, f: 0, label: '1' },
+			end: { s: 3, f: 5, label: '2' },
+			caption: 'Sol solto → Ré casa 5 (afinação: −5 casas na corda abaixo)',
+			captionNote: 'Como ao afinar: casa 5 = corda solta de cima',
 		},
 		'tuning-2': {
 			frets: 9,
@@ -71,7 +71,7 @@ const DIAGRAMS: Record<InstrumentId, Record<DiagramType, PositionDiagramConfig>>
 			frets: 10,
 			start: { s: 0, f: 5, label: '1' },
 			end: { s: 3, f: 8, label: '2' },
-			caption: 'Sol casa 5 → Mi grave casa 8 (mesma nota Dó, −2 casas, 3 cordas abaixo)',
+			caption: 'Sol casa 5 → Mi grave casa 8 (mesma nota Sol, −2 casas, 3 cordas abaixo)',
 			captionNote: 'Baixo — posição do dó',
 		},
 		tuning: {
@@ -115,10 +115,10 @@ export function getPositionPs(
 ): string {
 	if (instrumentId === 'bass') {
 		const bassPs: Record<number, string> = {
-			1: 'No baixo, todas as cordas são afinadas em quartas — a regra se aplica uniformemente, sem ajuste.',
-			2: 'No baixo, todas as cordas são afinadas em quartas — a regra se aplica uniformemente, sem ajuste.',
+			1: 'No baixo, todas as cordas são afinadas em quartas — a regra se aplica de forma uniforme, sem ajuste.',
+			2: 'No baixo, todas as cordas são afinadas em quartas — a regra se aplica de forma uniforme, sem ajuste.',
 			3: 'No baixo, todas as cordas são afinadas em quartas — use sempre 5 casas para trás na corda abaixo.',
-			4: 'No baixo, todas as cordas são afinadas em quartas — use 5 casas à frente na corda abaixo para a oitava acima (ou compare com a casa 5 na afinação).',
+			4: 'No baixo, todas as cordas são afinadas em quartas — use 5 casas à frente na corda de baixo para a oitava acima (ou compare com a casa 5 na afinação).',
 			5: 'Esta posição não depende da afinação entre cordas, pois permanece na mesma corda. Vale igualmente para baixo, guitarra e violão.',
 		};
 		return bassPs[positionNumber] ?? guitarPs;
