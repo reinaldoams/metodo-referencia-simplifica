@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import PixDonation from '../components/PixDonation.tsx';
 import { PIX_KEY } from '../data/donation';
+import { SITE_AUTHOR } from '../data/site';
 
 const pillars = [
 	{
@@ -76,6 +77,9 @@ const pages = [
 		<h1 class="relative mb-4 leading-tight">
 			Método Referência Simplifica
 		</h1>
+		<p class="relative mx-auto mt-4 max-w-xl text-sm text-music-muted md:text-base mb-6">
+			Por <strong class="font-medium text-music-text">{SITE_AUTHOR}</strong>
+		</p>
 		<p class="relative mx-auto mb-2 max-w-2xl text-music-muted">
 			<span class="font-medium text-music-text">MRS</span> — um caminho para aprender teoria
 			musical com menos informação para decorar e mais clareza na hora de tocar.
@@ -84,6 +88,7 @@ const pages = [
 			Referências visuais, tablaturas e mapas de escala que aceleram a memorização até ela
 			se tornar um instinto no instrumento.
 		</p>
+
 
 		<div class="relative mt-10 flex flex-wrap justify-center gap-4">
 			<a
@@ -220,7 +225,7 @@ const pages = [
 			<h2 class="mb-3 text-2xl md:text-3xl">Totalmente gratuito</h2>
 			<p class="text-music-muted">
 				Todo o conteúdo deste site é <strong class="font-medium text-music-text">100% gratuito</strong>.
-				O MRS é um projeto sem fins lucrativos, feito para ajudar quem quer aprender teoria
+				O MRS é um projeto sem fins lucrativos, criado por <strong class="font-medium text-music-text">{SITE_AUTHOR}</strong>, feito para ajudar quem quer aprender teoria
 				musical de forma prática — sem paywall, sem cadastro, sem pegadinha.
 			</p>
 			<p class="mt-4 text-music-muted">

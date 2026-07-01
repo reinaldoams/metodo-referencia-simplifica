@@ -1,6 +1,7 @@
 import { createSignal, onMount } from 'solid-js';
 
 import { PIX_KEY, PIX_MERCHANT_CITY, PIX_MERCHANT_NAME } from '../data/donation';
+import { SITE_AUTHOR } from '../data/site';
 
 interface Props {
 	pixKey?: string;
@@ -77,7 +78,7 @@ export default function PixDonation(props: Props) {
 				{copied() ? 'Copiado!' : 'Copiar chave Pix'}
 			</button>
 
-			<p class="text-music-muted">Doação voluntária — qualquer valor.</p>
+			<p class="text-music-muted">Doação voluntária — qualquer valor para apoiar {SITE_AUTHOR}.</p>
 			<p class="sr-only" aria-live="polite">
 				{copied() ? 'Chave Pix copiada.' : ''}
 			</p>

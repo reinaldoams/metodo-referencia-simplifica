@@ -1,5 +1,7 @@
 ---
 import Navbar from '../components/Navbar';
+import SiteFooter from '../components/SiteFooter.astro';
+import { SITE_AUTHOR } from '../data/site';
 import '../styles/global.css';
 
 interface Props {
@@ -21,6 +23,7 @@ const mainClass = wide
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="theme-color" content="#282a36" />
+		<meta name="author" content={SITE_AUTHOR} />
 		<meta name="generator" content={Astro.generator} />
 		<title>{title} · Método Referência Simplifica</title>
 	</head>
@@ -29,5 +32,6 @@ const mainClass = wide
 		<main class={mainClass}>
 			<slot />
 		</main>
+		<SiteFooter />
 	</body>
 </html>

@@ -1,5 +1,6 @@
 ---
 import MethodSection from './MethodSection.astro';
+import DegreeReveal from './DegreeReveal.tsx';
 
 const examples = [
 	{
@@ -49,14 +50,7 @@ const examples = [
 						</div>
 					</div>
 					<p class="flex-1 text-base leading-relaxed text-music-muted md:text-lg">{ex.description}</p>
-					<details class="group mt-4">
-						<summary class="cursor-pointer list-none rounded-lg border border-music-accent/40 bg-music-bg/40 px-4 py-3 text-center text-base font-medium text-music-text transition-colors hover:border-music-accent hover:bg-music-accent/10 active:scale-[0.99] group-open:hidden [&::-webkit-details-marker]:hidden">
-							Revelar resposta
-						</summary>
-						<p class="hidden cursor-default rounded-lg border border-white/5 bg-music-bg/50 px-4 py-3 text-center text-base text-music-muted group-open:block md:text-lg">
-							{ex.degree} = <span class="font-semibold text-music-text">{ex.result}</span>
-						</p>
-					</details>
+					<DegreeReveal client:load degree={ex.degree} result={ex.result} />
 				</article>
 			))
 		}

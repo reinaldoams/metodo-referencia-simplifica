@@ -1,11 +1,15 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import EncontradorDeNotas from '../components/EncontradorDeNotas';
+import { SITE_AUTHOR } from '../data/site';
 ---
 
 <Layout title="Encontrador de notas" wide>
 	<div class="mb-10 max-w-3xl space-y-4">
 		<h1>Encontrador de notas</h1>
+		<p class="mt-3 text-base text-music-muted md:text-lg">
+			Ferramenta por <strong class="text-music-text">{SITE_AUTHOR}</strong>
+		</p>
 		<p class="text-music-muted">
 			Clique em qualquer nota no braço para destacar todas as outras posições onde ela
 			aparece. Use o alternador para trocar entre baixo (4 cordas) e guitarra/violão (6
