@@ -296,7 +296,7 @@ export const pt: Translations = {
 			title: 'Posição do dó',
 			description:
 				'Uma nota é tocada e a mesma nota se encontra 2 casas atrás e 3 cordas abaixo.',
-			ps: 'Na guitarra/violão, se a busca passar pelas cordas Si ou Mi agudo, desloque uma casa a menos para trás — ou seja, 1 casa atrás em vez de 2.',
+			ps: 'esta posição só funciona encaixando nas cordas lá e ré',
 		},
 		{
 			number: 3,
@@ -431,7 +431,7 @@ export const pt: Translations = {
 				captionNote: 'Guitarra/violão — oitavada comum',
 			},
 			cPosition: {
-				caption: 'Sol casa 5 → Mi grave casa 8 (−2 casas, 3 cordas abaixo)',
+				caption: 'Lá casa 7 → Si casa 5 (mesma nota Mi, −2 casas, 3 cordas abaixo)',
 				captionNote: 'Guitarra/violão — posição do dó',
 			},
 			tuning: {
@@ -453,7 +453,7 @@ export const pt: Translations = {
 				captionNote: 'Baixo — oitavada comum',
 			},
 			cPosition: {
-				caption: 'Sol casa 5 → Mi grave casa 8 (mesma nota Sol, −2 casas, 3 cordas abaixo)',
+				caption: 'Lá casa 5 → Ré casa 3 (−2 casas na corda aguda, 1 corda acima)',
 				captionNote: 'Baixo — posição do dó',
 			},
 			tuning: {

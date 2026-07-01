@@ -24,7 +24,7 @@ export default function Navbar(props: Props) {
 	];
 
 	return (
-		<nav class="flex flex-wrap items-center justify-between gap-4 border-b-2 border-music-accent bg-music-surface px-6 py-4">
+		<nav class="sticky top-0 z-50 flex flex-wrap items-center justify-between gap-4 border-b-2 border-music-accent bg-music-surface px-6 py-4">
 			<a
 				href={localePath('/', props.locale)}
 				class="flex items-center gap-2 font-serif text-lg text-music-text no-underline hover:text-music-text"

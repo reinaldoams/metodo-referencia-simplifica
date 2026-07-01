@@ -310,7 +310,7 @@ export const en: Translations = {
 			title: 'C-shape position',
 			description:
 				'Play a note and find the same note 2 frets lower and 3 strings lower.',
-			ps: 'On guitar, if the search crosses the B or high E strings, shift one fret less backward — 1 fret back instead of 2.',
+			ps: 'this position only works when fitting on the A and D strings.',
 		},
 		{
 			number: 3,
@@ -445,7 +445,7 @@ export const en: Translations = {
 				captionNote: 'Guitar — common octave',
 			},
 			cPosition: {
-				caption: 'G fret 5 → low E fret 8 (−2 frets, 3 strings lower)',
+				caption: 'A fret 7 → B fret 5 (same pitch E, −2 frets, 3 strings lower)',
 				captionNote: 'Guitar — C-shape position',
 			},
 			tuning: {
@@ -467,7 +467,7 @@ export const en: Translations = {
 				captionNote: 'Bass — common octave',
 			},
 			cPosition: {
-				caption: 'G fret 5 → low E fret 8 (same pitch G, −2 frets, 3 strings lower)',
+				caption: 'A fret 5 → D fret 3 (−2 frets on the higher string, 1 string up)',
 				captionNote: 'Bass — C-shape position',
 			},
 			tuning: {

@@ -20,7 +20,7 @@ export const NOTE_POSITIONS: NotePosition[] = [
 		title: 'Posição do dó',
 		description:
 			'Uma nota é tocada e a mesma nota se encontra 2 casas atrás e 3 cordas abaixo.',
-		ps: 'Na guitarra/violão, se a busca passar pelas cordas Si ou Mi agudo, desloque uma casa a menos para trás — ou seja, 1 casa atrás em vez de 2.',
+		ps: 'esta posição só funciona encaixando nas cordas lá e ré',
 		diagram: 'c-position',
 	},
 	{

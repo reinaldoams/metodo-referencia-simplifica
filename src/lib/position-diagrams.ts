@@ -34,8 +34,8 @@ const DIAGRAM_GEOMETRY: Record<
 		},
 		'c-position': {
 			frets: 10,
-			start: { s: 2, f: 5, label: '1' },
-			end: { s: 5, f: 8, label: '2' },
+			start: { s: 4, f: 7, label: '1' },
+			end: { s: 1, f: 5, label: '2' },
 		},
 		tuning: {
 			frets: 8,
@@ -61,8 +61,8 @@ const DIAGRAM_GEOMETRY: Record<
 		},
 		'c-position': {
 			frets: 10,
-			start: { s: 0, f: 5, label: '1' },
-			end: { s: 3, f: 8, label: '2' },
+			start: { s: 2, f: 5, label: '1' },
+			end: { s: 1, f: 3, label: '2' },
 		},
 		tuning: {
 			frets: 8,
