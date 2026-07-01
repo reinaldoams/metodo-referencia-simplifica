@@ -1,4 +1,5 @@
 import { For, Show } from 'solid-js';
+import { getTranslations, type Locale } from '../../i18n';
 import FretboardVisual from '../FretboardVisual';
 import {
 	FRET_CELL_H,
@@ -6,6 +7,7 @@ import {
 	FRET_LABEL_COL,
 } from '../../lib/fretboard-layout';
 import { FRET_COUNT, INSTRUMENTS, getFretboardNotes, getNoteAtFret } from '../../lib/notes';
+import { noteToLabel } from '../../lib/note-labels';
 import { isDotInBounds } from '../../lib/major-scale-patterns';
 import type { useMajorScaleExplorer } from './useMajorScaleExplorer';
 
@@ -13,6 +15,7 @@ type Explorer = ReturnType<typeof useMajorScaleExplorer>;
 
 interface Props {
 	explorer: Explorer;
+	locale: Locale;
 	showDegreeLegend?: boolean;
 }
 
@@ -22,6 +25,7 @@ const CELL_H = FRET_CELL_H;
 const STRING_COUNT = 6;
 
 export default function MajorScaleFretboard(props: Props) {
+	const t = () => getTranslations(props.locale);
 	const fretboard = () => getFretboardNotes(INSTRUMENTS.guitar);
 	const gridColumns = () => `${LABEL_COL} repeat(${FRET_COUNT + 1}, ${CELL_W})`;
 
@@ -35,7 +39,7 @@ export default function MajorScaleFretboard(props: Props) {
 							{(fret) => (
 								<div class="flex items-end justify-center pb-1">
 									<span class="text-xs font-medium tracking-wide text-music-muted/80 uppercase md:text-sm">
-										{fret === 0 ? 'solta' : fret}
+										{fret === 0 ? t().common.openString : fret}
 									</span>
 								</div>
 							)}
@@ -107,11 +111,11 @@ export default function MajorScaleFretboard(props: Props) {
 															}
 															aria-label={
 																dot()
-																	? `Grau ${dot()!.degree}: ${note}`
-																	: note
+																	? `${t().common.degree} ${dot()!.degree}: ${noteToLabel(note, props.locale)}`
+																	: noteToLabel(note, props.locale)
 															}
 														>
-															<Show when={dot()} fallback={note}>
+															<Show when={dot()} fallback={noteToLabel(note, props.locale)}>
 																<span class="pointer-events-none text-sm md:text-base">
 																	{dot()!.degree}
 																</span>
@@ -139,9 +143,12 @@ export default function MajorScaleFretboard(props: Props) {
 						{(dot) => (
 							<span class="rounded-full bg-music-accent/15 px-3 py-1.5 text-sm text-music-text md:text-base">
 								{dot.degree} ={' '}
-								{getNoteAtFret(
-									INSTRUMENTS.guitar.openMidi[dot.stringIndex],
-									dot.fret,
+								{noteToLabel(
+									getNoteAtFret(
+										INSTRUMENTS.guitar.openMidi[dot.stringIndex],
+										dot.fret,
+									),
+									props.locale,
 								)}
 							</span>
 						)}

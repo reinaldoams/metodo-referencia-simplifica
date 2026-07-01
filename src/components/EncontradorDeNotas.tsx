@@ -1,9 +1,16 @@
 import { For, createSignal } from 'solid-js';
+import { getTranslations, type Locale } from '../i18n';
+import { getInstruments, type InstrumentId } from '../lib/notes';
 import NoteFinder from './NoteFinder';
 import NotePositionsGuide from './note-positions/NotePositionsGuide';
-import { INSTRUMENTS, type InstrumentId } from '../lib/notes';
 
-export default function EncontradorDeNotas() {
+interface Props {
+	locale: Locale;
+}
+
+export default function EncontradorDeNotas(props: Props) {
+	const t = () => getTranslations(props.locale);
+	const instruments = () => getInstruments(props.locale);
 	const [instrumentId, setInstrumentId] = createSignal<InstrumentId>('guitar');
 
 	function handleInstrumentChange(id: InstrumentId) {
@@ -13,9 +20,9 @@ export default function EncontradorDeNotas() {
 	return (
 		<div class="space-y-0">
 			<div class="mb-8 flex flex-wrap items-center gap-3">
-				<span class="text-sm font-medium text-music-muted">Instrumento:</span>
+				<span class="text-sm font-medium text-music-muted">{t().common.instrument}</span>
 				<div class="inline-flex rounded-lg border border-white/10 bg-music-surface p-1">
-					<For each={Object.values(INSTRUMENTS)}>
+					<For each={Object.values(instruments())}>
 						{(item) => (
 							<button
 								type="button"
@@ -33,9 +40,9 @@ export default function EncontradorDeNotas() {
 				</div>
 			</div>
 
-			<NoteFinder instrumentId={instrumentId()} />
+			<NoteFinder instrumentId={instrumentId()} locale={props.locale} />
 
-			<NotePositionsGuide instrumentId={instrumentId()} />
+			<NotePositionsGuide instrumentId={instrumentId()} locale={props.locale} />
 		</div>
 	);
 }

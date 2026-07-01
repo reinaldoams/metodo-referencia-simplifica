@@ -1,0 +1,11 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import MethodView from '../../views/MethodView.astro';
+import { getTranslations } from '../../i18n';
+
+const t = getTranslations(Astro.currentLocale);
+---
+
+<Layout title={(t.method as { title: string }).title} wide>
+	<MethodView />
+</Layout>

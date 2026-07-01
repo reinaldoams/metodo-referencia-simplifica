@@ -1,32 +1,11 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import EncontradorDeNotas from '../components/EncontradorDeNotas';
-import { SITE_AUTHOR } from '../data/site';
+import NoteFinderView from '../views/NoteFinderView.astro';
+import { getTranslations } from '../i18n';
+
+const t = getTranslations(Astro.currentLocale);
 ---
 
-<Layout title="Encontrador de notas" wide>
-	<div class="mb-10 max-w-3xl space-y-4">
-		<h1>Encontrador de notas</h1>
-		<p class="mt-3 text-base text-music-muted md:text-lg">
-			Ferramenta por <strong class="text-music-text">{SITE_AUTHOR}</strong>
-		</p>
-		<p class="text-music-muted">
-			Clique em qualquer nota no braço para destacar todas as outras posições onde ela
-			aparece. Use o alternador para trocar entre baixo (4 cordas) e guitarra/violão (6
-			cordas).
-		</p>
-		<p class="text-music-muted">
-			No braço você verá as letras A, B, C, D, E, F e G — em português: <strong class="text-music-text">Lá, Si, Dó, Ré, Mi, Fá e Sol</strong>.
-		</p>
-		<p class="text-music-muted">
-			Na afinação padrão de guitarra/violão (<strong class="text-music-text">EADGBE</strong>),
-			cada corda solta já começa com a nota da afinação: Mi grave, Lá, Ré, Sol, Si e Mi agudo.
-			A casa 0 é a corda solta; a partir daí é só avançar casa por casa.
-		</p>
-		<p class="text-music-muted">
-			Para nomear as casas seguintes, lembre: depois de <strong class="text-music-text">Si (B)</strong> e de <strong class="text-music-text">Mi (E)</strong> não há sustenido — a próxima casa já é <strong class="text-music-text">Dó</strong> e <strong class="text-music-text">Fá</strong>. Nas demais notas, a casa seguinte traz o sustenido (C♯, D♯, F♯, G♯, A♯).
-		</p>
-	</div>
-
-	<EncontradorDeNotas client:load />
+<Layout title={(t.noteFinderPage as { title: string }).title} wide>
+	<NoteFinderView />
 </Layout>

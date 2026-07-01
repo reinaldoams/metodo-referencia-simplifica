@@ -1,0 +1,71 @@
+---
+import PageLink from '../components/PageLink.astro';
+import MethodSection from '../components/method/MethodSection.astro';
+import MajorScaleExplorer from '../components/method/MajorScaleExplorer';
+import DegreeExamples from '../components/method/DegreeExamples.astro';
+import ScaleDegreeNames from '../components/method/ScaleDegreeNames.astro';
+import GreekModesSection from '../components/method/GreekModesSection.astro';
+import { SITE_AUTHOR } from '../data/site';
+import { getTranslations, localePath, type Locale } from '../i18n';
+
+const locale = (Astro.currentLocale ?? 'pt') as Locale;
+const t = getTranslations(locale);
+const m = t.method as Record<string, unknown>;
+const intro = m.intro as {
+	beforeNotes: string;
+	goToNoteFinder: string;
+	foundation: string;
+};
+const beforeNames = m.beforeNames as { title: string; subtitle: string; p1: string; p2: string };
+const majorOnNeck = m.majorOnNeck as {
+	title: string;
+	subtitle: string;
+	p1: string;
+	p2: string;
+	p3: string;
+};
+---
+
+<header class="mb-16 w-full">
+	<h1>{(m.title as string)}</h1>
+	<p class="mt-3 text-base text-music-muted md:text-lg">
+		{t.author.methodAndSite}{' '}
+		<strong class="text-music-text">{SITE_AUTHOR}</strong>
+	</p>
+	<p class="mt-6 text-music-muted">{intro.beforeNotes}</p>
+	<PageLink
+		href={localePath('/encontrador-de-notas', locale)}
+		label={intro.goToNoteFinder}
+		locale={locale}
+	/>
+	<p class="mt-6 text-music-muted">{intro.foundation}</p>
+</header>
+
+<MethodSection title={beforeNames.title} subtitle={beforeNames.subtitle}>
+	<div class="w-full space-y-5 text-music-muted">
+		<p>{beforeNames.p1}</p>
+		<p>{beforeNames.p2}</p>
+	</div>
+</MethodSection>
+
+<MethodSection class="mt-20" title={majorOnNeck.title} subtitle={majorOnNeck.subtitle}>
+	<div class="mb-8 w-full space-y-5 text-music-muted">
+		<p>{majorOnNeck.p1}</p>
+		<p>{majorOnNeck.p2}</p>
+		<p>{majorOnNeck.p3}</p>
+	</div>
+
+	<MajorScaleExplorer client:load locale={locale} />
+</MethodSection>
+
+<div class="mt-20">
+	<DegreeExamples locale={locale} />
+</div>
+
+<div class="mt-20">
+	<ScaleDegreeNames locale={locale} />
+</div>
+
+<div class="mt-20">
+	<GreekModesSection locale={locale} />
+</div>

@@ -1,20 +1,22 @@
 import { createEffect, createMemo, createSignal, onCleanup } from 'solid-js';
+import type { Locale } from '../../i18n';
 import { FRET_COUNT, INSTRUMENTS, getNoteAtFret } from '../../lib/notes';
 import {
 	DEFAULT_G_ROOT,
-	MAJOR_SCALE_PATTERNS,
+	getMajorScalePatterns,
 	type ScalePatternId,
 	getPatternDotsAtRoot,
 	isDotInBounds,
 } from '../../lib/major-scale-patterns';
 
-export function useMajorScaleExplorer() {
+export function useMajorScaleExplorer(locale: Locale) {
 	const [patternId, setPatternId] = createSignal<ScalePatternId>('compact');
 	const [root, setRoot] = createSignal(DEFAULT_G_ROOT);
 	const [dragging, setDragging] = createSignal(false);
 	const [didDrag, setDidDrag] = createSignal(false);
 
-	const pattern = createMemo(() => MAJOR_SCALE_PATTERNS[patternId()]);
+	const patterns = createMemo(() => getMajorScalePatterns(locale));
+	const pattern = createMemo(() => patterns()[patternId()]);
 	const scaleDots = createMemo(() => getPatternDotsAtRoot(pattern(), root()));
 
 	const tonicName = createMemo(() => {
@@ -85,6 +87,7 @@ export function useMajorScaleExplorer() {
 		setPatternId,
 		root,
 		pattern,
+		patterns,
 		scaleDots,
 		tonicName,
 		dragging,

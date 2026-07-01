@@ -1,43 +1,38 @@
 ---
+import { getTranslations, type Locale } from '../../i18n';
 import MethodSection from './MethodSection.astro';
 
-const degrees = [
-	{ n: 1, name: 'Tônica', alt: 'Fundamental' },
-		{ n: 2, name: 'Segundo grau', alt: 'Supertônica / Nona (na extensão)' },
-	{ n: 3, name: 'Terça maior', alt: 'Define a modalidade maior' },
-	{ n: 4, name: 'Quarta justa', alt: 'Subdominante' },
-	{ n: 5, name: 'Quinta justa', alt: 'Dominante' },
-	{ n: 6, name: 'Sexta maior', alt: 'Sexta maior' },
-	{ n: 7, name: 'Sétima maior', alt: 'Um semitom abaixo da tônica' },
-	{ n: 8, name: 'Oitava', alt: 'Tônica novamente' },
-];
+interface Props {
+	locale: Locale;
+}
 
-const alterations = [
-	{ degree: '2.º grau', back: 'Segunda menor / Nona menor', forward: 'Segunda aumentada / Nona maior' },
-	{ degree: '3.º grau', back: 'Terça menor', forward: 'Terça aumentada' },
-	{ degree: '4.º grau', back: 'Quarta diminuta', forward: 'Quarta aumentada' },
-	{ degree: '5.º grau', back: 'Quinta diminuta', forward: 'Quinta aumentada' },
-	{ degree: '6.º grau', back: 'Sexta menor', forward: 'Sexta aumentada' },
-	{ degree: '7.º grau', back: 'Sétima menor', forward: 'Sétima aumentada' },
-];
+const { locale } = Astro.props;
+const t = getTranslations(locale);
+const dn = t.method.degreeNames as {
+	title: string;
+	subtitle: string;
+	tableHeaders: { degree: string; name: string; note: string };
+	degrees: Array<{ n: number; name: string; alt: string }>;
+	alterationsTitle: string;
+	alterationsIntro: string;
+	alterationsHeaders: { degree: string; back: string; forward: string };
+	alterations: Array<{ degree: string; back: string; forward: string }>;
+};
 ---
 
-<MethodSection
-	title="Dar nomes aos graus (opcional)"
-	subtitle="Na escala maior, cada grau tem um nome. Esses nomes mudam quando o intervalo se desvia do padrão maior."
->
+<MethodSection title={dn.title} subtitle={dn.subtitle}>
 	<div class="mb-10 w-full overflow-x-auto rounded-xl border border-white/10">
 		<table class="w-full min-w-[28rem] text-left text-base md:text-lg">
 			<thead class="border-b border-white/10 bg-music-surface/60">
 				<tr>
-					<th class="px-5 py-4 font-medium text-music-text">Grau</th>
-					<th class="px-5 py-4 font-medium text-music-text">Nome</th>
-					<th class="px-5 py-4 font-medium text-music-text">Observação</th>
+					<th class="px-5 py-4 font-medium text-music-text">{dn.tableHeaders.degree}</th>
+					<th class="px-5 py-4 font-medium text-music-text">{dn.tableHeaders.name}</th>
+					<th class="px-5 py-4 font-medium text-music-text">{dn.tableHeaders.note}</th>
 				</tr>
 			</thead>
 			<tbody class="divide-y divide-white/5">
 				{
-					degrees.map((d) => (
+					dn.degrees.map((d) => (
 						<tr class="bg-music-bg/20">
 							<td class="px-5 py-4 font-mono text-music-text">{d.n}</td>
 							<td class="px-5 py-4 font-medium text-music-text">{d.name}</td>
@@ -49,26 +44,21 @@ const alterations = [
 		</table>
 	</div>
 
-	<h3 class="mb-4 text-2xl md:text-3xl">
-		Quando o grau se desvia da escala maior
-	</h3>
-	<p class="mb-6 w-full text-music-muted">
-		Compare sempre com o intervalo que você encontraria na escala maior encaixada na mesma
-		tônica. Uma casa a mais ou a menos altera o nome do grau:
-	</p>
+	<h3 class="mb-4 text-2xl md:text-3xl">{dn.alterationsTitle}</h3>
+	<p class="mb-6 w-full text-music-muted">{dn.alterationsIntro}</p>
 
 	<div class="w-full overflow-x-auto rounded-xl border border-white/10">
 		<table class="w-full min-w-[32rem] text-left text-base md:text-lg">
 			<thead class="border-b border-white/10 bg-music-surface/60">
 				<tr>
-					<th class="px-5 py-4 font-medium text-music-text">Grau</th>
-					<th class="px-5 py-4 font-medium text-music-text">1 casa atrás</th>
-					<th class="px-5 py-4 font-medium text-music-text">1 casa à frente</th>
+					<th class="px-5 py-4 font-medium text-music-text">{dn.alterationsHeaders.degree}</th>
+					<th class="px-5 py-4 font-medium text-music-text">{dn.alterationsHeaders.back}</th>
+					<th class="px-5 py-4 font-medium text-music-text">{dn.alterationsHeaders.forward}</th>
 				</tr>
 			</thead>
 			<tbody class="divide-y divide-white/5">
 				{
-					alterations.map((row) => (
+					dn.alterations.map((row) => (
 						<tr class="bg-music-bg/20">
 							<td class="px-5 py-4 font-medium text-music-text">{row.degree}</td>
 							<td class="px-5 py-4 text-music-muted">{row.back}</td>

@@ -1,3 +1,5 @@
+import { getTranslations, type Locale } from '../i18n';
+
 export const NOTE_NAMES = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'] as const;
 
 export type NoteName = (typeof NOTE_NAMES)[number];
@@ -24,6 +26,14 @@ export const INSTRUMENTS: Record<InstrumentId, InstrumentConfig> = {
 		openMidi: [43, 38, 33, 28],
 	},
 };
+
+export function getInstruments(locale: Locale): Record<InstrumentId, InstrumentConfig> {
+	const t = getTranslations(locale);
+	return {
+		guitar: { ...INSTRUMENTS.guitar, label: t.instruments.guitar },
+		bass: { ...INSTRUMENTS.bass, label: t.instruments.bass },
+	};
+}
 
 export const FRET_COUNT = 12;
 

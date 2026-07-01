@@ -1,0 +1,11 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ScaleFinderView from '../../views/ScaleFinderView.astro';
+import { getTranslations } from '../../i18n';
+
+const t = getTranslations(Astro.currentLocale);
+---
+
+<Layout title={(t.scaleFinderPage as { title: string }).title} wide>
+	<ScaleFinderView />
+</Layout>

@@ -1,6 +1,10 @@
 ---
+import { getRelativeLocaleUrl } from 'astro:i18n';
+
 import Navbar from '../components/Navbar';
 import SiteFooter from '../components/SiteFooter.astro';
+import { getTranslations, pathWithoutLocale } from '../i18n';
+import type { Locale } from '../i18n';
 import { SITE_AUTHOR } from '../data/site';
 import '../styles/global.css';
 
@@ -11,13 +15,19 @@ interface Props {
 
 const { title, wide = false } = Astro.props;
 
+const locale = (Astro.currentLocale ?? 'pt') as Locale;
+const t = getTranslations(locale);
+const pagePath = pathWithoutLocale(Astro.url.pathname);
+const ptUrl = getRelativeLocaleUrl('pt', pagePath);
+const enUrl = getRelativeLocaleUrl('en', pagePath);
+
 const mainClass = wide
 	? 'mx-auto max-w-6xl px-6 py-10 pb-16 text-lg leading-relaxed md:text-xl [&_h1]:m-0 [&_h1]:text-5xl [&_h1]:leading-tight md:[&_h1]:text-6xl'
 	: 'mx-auto max-w-3xl px-6 py-10 pb-16 [&_h1]:m-0 [&_h1]:text-3xl';
 ---
 
 <!doctype html>
-<html lang="pt-BR">
+<html lang={t.htmlLang}>
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
@@ -25,13 +35,20 @@ const mainClass = wide
 		<meta name="theme-color" content="#282a36" />
 		<meta name="author" content={SITE_AUTHOR} />
 		<meta name="generator" content={Astro.generator} />
-		<title>{title} · Método Referência Simplifica</title>
+		<title>{title} · {t.siteName}</title>
 	</head>
 	<body>
-		<Navbar />
+		<Navbar
+			locale={locale}
+			ptUrl={ptUrl}
+			enUrl={enUrl}
+			siteName={t.siteName}
+			nav={t.nav}
+			lang={t.lang}
+		/>
 		<main class={mainClass}>
 			<slot />
 		</main>
-		<SiteFooter />
+		<SiteFooter locale={locale} />
 	</body>
 </html>

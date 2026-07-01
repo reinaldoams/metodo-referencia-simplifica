@@ -3,6 +3,7 @@ import { createSignal } from 'solid-js';
 interface Props {
 	degree: string;
 	result: string;
+	revealLabel: string;
 }
 
 const boxClass =
@@ -26,7 +27,7 @@ export default function DegreeReveal(props: Props) {
 					class={`${boxClass} cursor-pointer border-music-accent/40 bg-music-bg/40 font-medium text-music-text transition-colors hover:border-music-accent hover:bg-music-accent/10 active:scale-[0.99]`}
 					onClick={() => setRevealed(true)}
 				>
-					Revelar resposta
+					{props.revealLabel}
 				</button>
 			)}
 		</div>

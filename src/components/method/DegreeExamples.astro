@@ -1,56 +1,48 @@
 ---
+import { getTranslations, type Locale } from '../../i18n';
 import MethodSection from './MethodSection.astro';
 import DegreeReveal from './DegreeReveal.tsx';
 
-const examples = [
-	{
-		note: 'Lá',
-		result: 'Mi',
-		degree: '5.º grau',
-		description:
-			'Encaixe o desenho na nota Lá. Encontre o 5.º grau no braço — a quinta justa da tonalidade.',
-	},
-	{
-		note: 'Ré',
-		result: 'Fá♯',
-		degree: '3.º grau',
-		description:
-			'Encaixe o desenho na nota Ré. Localize o 3.º grau — a terça maior que define a sonoridade maior.',
-	},
-	{
-		note: 'Dó',
-		result: 'Si',
-		degree: '7.º grau',
-		description:
-			'Encaixe o desenho na nota Dó. Onde está o 7.º grau? Pense na sétima maior, um semitom abaixo da tônica.',
-	},
-];
+interface Props {
+	locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = getTranslations(locale);
+const de = t.method.degreeExamples as {
+	title: string;
+	subtitle: string;
+	intro: string;
+	examples: Array<{ note: string; result: string; degree: string; description: string }>;
+	tonicPrefix: string;
+};
 ---
 
-<MethodSection
-	title="Encontre os graus manualmente"
-	subtitle="Com o desenho da escala maior, você já consegue localizar qualquer grau em qualquer tonalidade."
->
-	<p class="mb-8 w-full text-music-muted">
-		Encorajamos você a praticar encaixando o desenho sobre notas diferentes e identificando os
-		graus. Três exemplos para começar — tente resolver antes de revelar a resposta:
-	</p>
+<MethodSection title={de.title} subtitle={de.subtitle}>
+	<p class="mb-8 w-full text-music-muted">{de.intro}</p>
 
 	<div class="grid w-full gap-4 md:grid-cols-3">
 		{
-			examples.map((ex) => (
+			de.examples.map((ex) => (
 				<article class="flex flex-col rounded-xl border border-white/10 bg-music-surface/50 p-6 md:p-8">
 					<div class="mb-4 flex items-center gap-4">
 						<span class="flex size-14 items-center justify-center rounded-full bg-music-accent font-serif text-2xl text-music-on-accent md:size-16 md:text-3xl">
 							{ex.note.charAt(0)}
 						</span>
 						<div>
-							<p class="text-lg font-semibold text-music-text md:text-xl">Tônica: {ex.note}</p>
+							<p class="text-lg font-semibold text-music-text md:text-xl">
+								{de.tonicPrefix} {ex.note}
+							</p>
 							<p class="text-base text-music-text md:text-lg">{ex.degree}</p>
 						</div>
 					</div>
 					<p class="flex-1 text-base leading-relaxed text-music-muted md:text-lg">{ex.description}</p>
-					<DegreeReveal client:load degree={ex.degree} result={ex.result} />
+					<DegreeReveal
+						client:load
+						degree={ex.degree}
+						result={ex.result}
+						revealLabel={t.common.revealAnswer}
+					/>
 				</article>
 			))
 		}

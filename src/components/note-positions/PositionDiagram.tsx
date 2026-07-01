@@ -1,3 +1,4 @@
+import type { Locale } from '../../i18n';
 import type { DiagramType } from '../../lib/position-diagrams';
 import { getPositionDiagramConfig } from '../../lib/position-diagrams';
 import type { InstrumentId } from '../../lib/notes';
@@ -5,10 +6,11 @@ import type { InstrumentId } from '../../lib/notes';
 interface Props {
 	type: DiagramType;
 	instrumentId: InstrumentId;
+	locale: Locale;
 }
 
 export default function PositionDiagram(props: Props) {
-	const config = () => getPositionDiagramConfig(props.type, props.instrumentId);
+	const config = () => getPositionDiagramConfig(props.type, props.instrumentId, props.locale);
 	const strings = () => config().strings;
 	const frets = () => config().frets;
 	const start = () => config().start;

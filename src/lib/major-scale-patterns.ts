@@ -1,3 +1,5 @@
+import { getTranslations, type Locale } from '../i18n';
+
 /** Corda 1 = Mi agudo (index 0) … corda 6 = Mi grave (index 5). */
 export type ScalePatternId = 'compact' | 'extended';
 
@@ -40,22 +42,43 @@ const B_STRING = 1;
 const OPEN_MIDI = [64, 59, 55, 50, 45, 40];
 const MAJOR_INTERVALS = [0, 2, 4, 5, 7, 9, 11];
 
-export const MAJOR_SCALE_PATTERNS: Record<ScalePatternId, ScalePattern> = {
+const BASE_PATTERNS: Record<ScalePatternId, Omit<ScalePattern, 'label' | 'description'>> = {
 	compact: {
 		id: 'compact',
-		label: 'Desenho 1',
-		description: 'Cordas 6, 5 e 4 — ideal para começar.',
 		defaultRoot: DEFAULT_ROOT,
 		dots: assignScaleDegrees(buildDots(COMPACT_SHAPE), DEFAULT_ROOT),
 	},
 	extended: {
 		id: 'extended',
-		label: 'Desenho 2',
-		description: 'Cordas 6 a 1 — cobre mais o braço.',
 		defaultRoot: DEFAULT_ROOT,
 		dots: assignScaleDegrees(buildDots(EXTENDED_SHAPE), DEFAULT_ROOT),
 	},
 };
+
+export const MAJOR_SCALE_PATTERNS: Record<ScalePatternId, ScalePattern> = {
+	compact: {
+		...BASE_PATTERNS.compact,
+		label: 'Desenho 1',
+		description: 'Cordas 6, 5 e 4 — ideal para começar.',
+	},
+	extended: {
+		...BASE_PATTERNS.extended,
+		label: 'Desenho 2',
+		description: 'Cordas 6 a 1 — cobre mais o braço.',
+	},
+};
+
+export function getMajorScalePatterns(locale: Locale): Record<ScalePatternId, ScalePattern> {
+	const t = getTranslations(locale);
+	const sp = t.scalePatterns as Record<
+		ScalePatternId,
+		{ label: string; description: string }
+	>;
+	return {
+		compact: { ...BASE_PATTERNS.compact, ...sp.compact },
+		extended: { ...BASE_PATTERNS.extended, ...sp.extended },
+	};
+}
 
 function buildDots(shape: Record<number, number[]>): Omit<PatternDot, 'degree'>[] {
 	const dots: Omit<PatternDot, 'degree'>[] = [];

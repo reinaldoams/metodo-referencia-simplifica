@@ -1,6 +1,7 @@
+import { getTranslations, type Locale } from '../i18n';
 import type { NoteName } from './notes';
 import { NOTE_NAMES } from './notes';
-import { noteToPtLabel } from './note-labels';
+import { noteToLabel } from './note-labels';
 
 export interface GreekModeDefinition {
 	number: number;
@@ -28,64 +29,27 @@ export interface ModeBreakdown {
 	degrees: ModeDegreeInfo[];
 }
 
-export const GREEK_MODES: readonly GreekModeDefinition[] = [
-	{
-		number: 1,
-		name: 'Jônio',
-		adjective: 'Jônio',
-		ordinalLabel: 'primeiro modo grego',
-		aliases: ['Escala maior', 'Modo maior', 'Ionian'],
-		intervals: [0, 2, 4, 5, 7, 9, 11],
-	},
-	{
-		number: 2,
-		name: 'Dórico',
-		adjective: 'Dórico',
-		ordinalLabel: 'segundo modo grego',
-		aliases: ['Escala dórica', 'Dorian'],
-		intervals: [0, 2, 3, 5, 7, 9, 10],
-	},
-	{
-		number: 3,
-		name: 'Frígio',
-		adjective: 'Frígio',
-		ordinalLabel: 'terceiro modo grego',
-		aliases: ['Escala frígia', 'Phrygian'],
-		intervals: [0, 1, 3, 5, 7, 8, 10],
-	},
-	{
-		number: 4,
-		name: 'Lídio',
-		adjective: 'Lídio',
-		ordinalLabel: 'quarto modo grego',
-		aliases: ['Escala lídia', 'Lydian'],
-		intervals: [0, 2, 4, 6, 7, 9, 11],
-	},
-	{
-		number: 5,
-		name: 'Mixolídio',
-		adjective: 'Mixolidiano',
-		ordinalLabel: 'quinto modo grego',
-		aliases: ['Escala mixolídia', 'Mixolydian'],
-		intervals: [0, 2, 4, 5, 7, 9, 10],
-	},
-	{
-		number: 6,
-		name: 'Eólio',
-		adjective: 'Eólio',
-		ordinalLabel: 'sexto modo grego',
-		aliases: ['Escala menor natural', 'Escala menor eólia', 'Aeolian'],
-		intervals: [0, 2, 3, 5, 7, 8, 10],
-	},
-	{
-		number: 7,
-		name: 'Lócrio',
-		adjective: 'Lócrio',
-		ordinalLabel: 'sétimo modo grego',
-		aliases: ['Escala lócria', 'Locrian'],
-		intervals: [0, 1, 3, 5, 6, 8, 10],
-	},
-] as const;
+const MODE_INTERVALS: Record<number, readonly [number, number, number, number, number, number, number]> = {
+	1: [0, 2, 4, 5, 7, 9, 11],
+	2: [0, 2, 3, 5, 7, 9, 10],
+	3: [0, 1, 3, 5, 7, 8, 10],
+	4: [0, 2, 4, 6, 7, 9, 11],
+	5: [0, 2, 4, 5, 7, 9, 10],
+	6: [0, 2, 3, 5, 7, 8, 10],
+	7: [0, 1, 3, 5, 6, 8, 10],
+};
+
+export function getGreekModes(locale: Locale): GreekModeDefinition[] {
+	const t = getTranslations(locale);
+	const modes = (t.greekModes as { modes: Array<Omit<GreekModeDefinition, 'intervals'>> }).modes;
+	return modes.map((mode) => ({
+		...mode,
+		intervals: MODE_INTERVALS[mode.number],
+	}));
+}
+
+/** @deprecated Use getGreekModes(locale) */
+export const GREEK_MODES: readonly GreekModeDefinition[] = getGreekModes('pt');
 
 const MAJOR_INTERVALS = [0, 2, 4, 5, 7, 9, 11] as const;
 
@@ -97,32 +61,36 @@ function noteFromPitchClass(pc: number): NoteName {
 	return NOTE_NAMES[((pc % 12) + 12) % 12];
 }
 
-function intervalName(semitones: number, degree: number): string {
+function intervalName(
+	semitones: number,
+	degree: number,
+	intervals: Record<string, string>,
+): string {
 	switch (semitones) {
 		case 0:
-			return 'Tônica';
+			return intervals.tonic;
 		case 1:
-			return 'Segunda menor';
+			return intervals.minor2;
 		case 2:
-			return 'Segunda maior';
+			return intervals.major2;
 		case 3:
-			return 'Terça menor';
+			return intervals.minor3;
 		case 4:
-			return 'Terça maior';
+			return intervals.major3;
 		case 5:
-			return 'Quarta justa';
+			return intervals.perfect4;
 		case 6:
-			return degree === 4 ? 'Quarta aumentada' : 'Quinta diminuta';
+			return degree === 4 ? intervals.augmented4 : intervals.diminished5;
 		case 7:
-			return 'Quinta justa';
+			return intervals.perfect5;
 		case 8:
-			return 'Sexta menor';
+			return intervals.minor6;
 		case 9:
-			return 'Sexta maior';
+			return intervals.major6;
 		case 10:
-			return 'Sétima menor';
+			return intervals.minor7;
 		case 11:
-			return 'Sétima maior';
+			return intervals.major7;
 		default:
 			return '';
 	}
@@ -133,8 +101,14 @@ function majorScaleNotes(tonic: NoteName): NoteName[] {
 	return MAJOR_INTERVALS.map((interval) => noteFromPitchClass(rootPc + interval));
 }
 
-export function getModeBreakdown(majorTonic: NoteName, modeNumber: number): ModeBreakdown {
-	const mode = GREEK_MODES[modeNumber - 1];
+export function getModeBreakdown(
+	majorTonic: NoteName,
+	modeNumber: number,
+	locale: Locale,
+): ModeBreakdown {
+	const t = getTranslations(locale);
+	const modes = getGreekModes(locale);
+	const mode = modes[modeNumber - 1];
 	const scaleNotes = majorScaleNotes(majorTonic);
 	const tonicNote = scaleNotes[modeNumber - 1];
 	const reordered = [...scaleNotes.slice(modeNumber - 1), ...scaleNotes.slice(0, modeNumber - 1)];
@@ -145,15 +119,15 @@ export function getModeBreakdown(majorTonic: NoteName, modeNumber: number): Mode
 		return {
 			degree,
 			note,
-			noteLabel: noteToPtLabel(note),
-			intervalName: intervalName(semitones, degree),
+			noteLabel: noteToLabel(note, locale),
+			intervalName: intervalName(semitones, degree, t.intervals),
 		};
 	});
 
 	return {
 		mode,
 		tonicNote,
-		tonicLabel: noteToPtLabel(tonicNote),
+		tonicLabel: noteToLabel(tonicNote, locale),
 		majorScaleDegree: modeNumber,
 		degrees,
 	};
@@ -163,6 +137,6 @@ export function formatModeTitle(tonicLabel: string, mode: GreekModeDefinition): 
 	return `${tonicLabel} ${mode.adjective}`;
 }
 
-export function getAllModeBreakdowns(majorTonic: NoteName): ModeBreakdown[] {
-	return GREEK_MODES.map((mode) => getModeBreakdown(majorTonic, mode.number));
+export function getAllModeBreakdowns(majorTonic: NoteName, locale: Locale): ModeBreakdown[] {
+	return getGreekModes(locale).map((mode) => getModeBreakdown(majorTonic, mode.number, locale));
 }

@@ -14,4 +14,12 @@ export default defineConfig({
 	},
 
   adapter: cloudflare(),
+
+  i18n: {
+    locales: ['pt', 'en'],
+    defaultLocale: 'pt',
+    routing: {
+      prefixDefaultLocale: false,
+    },
+  },
 });

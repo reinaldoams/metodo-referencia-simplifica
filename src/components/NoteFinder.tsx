@@ -1,10 +1,12 @@
 import { For, Show, createEffect, createMemo, createSignal } from 'solid-js';
+import { getTranslations, type Locale } from '../i18n';
 import FretboardVisual from './FretboardVisual';
 import {
 	FRET_CELL_H,
 	FRET_CELL_W,
 	FRET_LABEL_COL,
 } from '../lib/fretboard-layout';
+import { noteToLabel } from '../lib/note-labels';
 import {
 	FRET_COUNT,
 	INSTRUMENTS,
@@ -19,9 +21,12 @@ const CELL_H = FRET_CELL_H;
 
 interface Props {
 	instrumentId: InstrumentId;
+	locale: Locale;
 }
 
 export default function NoteFinder(props: Props) {
+	const t = () => getTranslations(props.locale);
+	const nf = () => t().noteFinder as Record<string, string>;
 	const [selected, setSelected] = createSignal<{ stringIndex: number; fret: number } | null>(null);
 
 	const instrument = createMemo(() => INSTRUMENTS[props.instrumentId]);
@@ -74,19 +79,20 @@ export default function NoteFinder(props: Props) {
 		<div class="space-y-8">
 			<Show
 				when={selectedNote()}
-				fallback={
-					<p class="text-sm text-music-muted">
-						Clique em uma casa para ver todas as posições dessa nota no braço.
-					</p>
-				}
+				fallback={<p class="text-sm text-music-muted">{nf().clickPrompt}</p>}
 			>
 				{(note) => (
 					<p class="text-sm text-music-muted">
-						Nota selecionada:{' '}
-						<span class="font-semibold text-music-text">{note()}</span>
+						{nf().selectedNote}{' '}
+						<span class="font-semibold text-music-text">
+							{noteToLabel(note(), props.locale)}
+						</span>
 						{' · '}
 						<span class="text-music-muted">
-							{countMatches(fretboard(), note())} posições no braço
+							{nf().positionsOnNeck.replace(
+								'{count}',
+								String(countMatches(fretboard(), note())),
+							)}
 						</span>
 					</p>
 				)}
@@ -103,7 +109,7 @@ export default function NoteFinder(props: Props) {
 							{(fret) => (
 								<div class="flex items-end justify-center pb-1">
 									<span class="text-[0.65rem] font-medium tracking-wide text-music-muted/80 uppercase">
-										{fret === 0 ? 'solta' : fret}
+										{fret === 0 ? t().common.openString : fret}
 									</span>
 								</div>
 							)}
@@ -147,14 +153,17 @@ export default function NoteFinder(props: Props) {
 													<button
 														type="button"
 														class={`absolute top-1/2 left-1/2 flex size-10 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border text-[0.7rem] font-semibold transition-all duration-150 md:size-11 md:text-xs ${cellClass(stringIndex(), fret(), note)}`}
-														aria-label={`${note} na corda ${instrument().stringLabels[stringIndex()]}, casa ${fret()}`}
+														aria-label={nf()
+															.ariaLabel.replace('{note}', noteToLabel(note, props.locale))
+															.replace('{string}', instrument().stringLabels[stringIndex()])
+															.replace('{fret}', String(fret()))}
 														aria-pressed={
 															selected()?.stringIndex === stringIndex() &&
 															selected()?.fret === fret()
 														}
 														onClick={() => handleCellClick(stringIndex(), fret())}
 													>
-														{note}
+														{noteToLabel(note, props.locale)}
 													</button>
 												</div>
 											)}
@@ -168,8 +177,7 @@ export default function NoteFinder(props: Props) {
 			</div>
 
 			<p class="text-xs text-music-muted">
-				Convenção de tablatura: corda mais aguda no topo. Casas de 0 (corda solta) a{' '}
-				{FRET_COUNT}.
+				{nf().tabConvention.replace('{fretCount}', String(FRET_COUNT))}
 			</p>
 		</div>
 	);

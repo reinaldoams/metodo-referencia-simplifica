@@ -1,0 +1,11 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import NoteFinderView from '../../views/NoteFinderView.astro';
+import { getTranslations } from '../../i18n';
+
+const t = getTranslations(Astro.currentLocale);
+---
+
+<Layout title={(t.noteFinderPage as { title: string }).title} wide>
+	<NoteFinderView />
+</Layout>

@@ -1,13 +1,17 @@
 import { createSignal, onMount } from 'solid-js';
 
+import { getTranslations, type Locale } from '../i18n';
 import { PIX_KEY, PIX_MERCHANT_CITY, PIX_MERCHANT_NAME } from '../data/donation';
 import { SITE_AUTHOR } from '../data/site';
 
 interface Props {
+	locale: Locale;
 	pixKey?: string;
 }
 
 export default function PixDonation(props: Props) {
+	const t = () => getTranslations(props.locale);
+	const d = () => t().donation;
 	const pixKey = () => props.pixKey ?? PIX_KEY;
 	const [copied, setCopied] = createSignal(false);
 	const [qrDataUrl, setQrDataUrl] = createSignal<string | null>(null);
@@ -47,7 +51,7 @@ export default function PixDonation(props: Props) {
 			{qrDataUrl() ? (
 				<img
 					src={qrDataUrl()!}
-					alt="QR Code Pix para doação ao Método Referência Simplifica"
+					alt={d().qrAlt}
 					width={180}
 					height={180}
 					class="rounded-lg border border-white/10 bg-white p-2"
@@ -58,10 +62,10 @@ export default function PixDonation(props: Props) {
 					aria-hidden="true"
 				/>
 			)}
-			<p class="text-music-muted">Escaneie no app do banco</p>
+			<p class="text-music-muted">{d().scanHint}</p>
 
 			<div class="w-full max-w-lg text-left">
-				<p class="mb-2 text-center text-music-muted">Chave Pix (aleatória)</p>
+				<p class="mb-2 text-center text-music-muted">{d().keyLabel}</p>
 				<p
 					id="pix-key"
 					class="select-all rounded-lg border border-white/10 bg-music-bg/60 px-4 py-3 text-center font-mono break-all text-music-text"
@@ -75,12 +79,12 @@ export default function PixDonation(props: Props) {
 				onClick={copyKey}
 				class="rounded-lg bg-music-accent px-6 py-2.5 font-medium text-music-on-accent transition-colors hover:bg-music-accent-hover"
 			>
-				{copied() ? 'Copiado!' : 'Copiar chave Pix'}
+				{copied() ? d().copied : d().copy}
 			</button>
 
-			<p class="text-music-muted">Doação voluntária — qualquer valor para apoiar {SITE_AUTHOR}.</p>
+			<p class="text-music-muted">{d().voluntary.replace('{author}', SITE_AUTHOR)}</p>
 			<p class="sr-only" aria-live="polite">
-				{copied() ? 'Chave Pix copiada.' : ''}
+				{copied() ? d().copiedSr : ''}
 			</p>
 		</div>
 	);
