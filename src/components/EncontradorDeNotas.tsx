@@ -1,8 +1,10 @@
-import { For, createSignal } from 'solid-js';
+import { For, Show, createMemo, createSignal } from 'solid-js';
 import { getTranslations, type Locale } from '../i18n';
 import { getInstruments, type InstrumentId } from '../lib/notes';
 import NoteFinder from './NoteFinder';
 import NotePositionsGuide from './note-positions/NotePositionsGuide';
+
+const INSTRUMENT_IDS: InstrumentId[] = ['guitar', 'bass'];
 
 interface Props {
 	locale: Locale;
@@ -10,39 +12,47 @@ interface Props {
 
 export default function EncontradorDeNotas(props: Props) {
 	const t = () => getTranslations(props.locale);
-	const instruments = () => getInstruments(props.locale);
+	const instrumentLabels = createMemo(() => {
+		const instruments = getInstruments(props.locale);
+		return {
+			guitar: instruments.guitar.label,
+			bass: instruments.bass.label,
+		};
+	});
 	const [instrumentId, setInstrumentId] = createSignal<InstrumentId>('guitar');
-
-	function handleInstrumentChange(id: InstrumentId) {
-		setInstrumentId(id);
-	}
 
 	return (
 		<div class="space-y-0">
-			<div class="mb-8 flex flex-wrap items-center gap-3">
+			<div class="relative z-20 mb-8 flex flex-wrap items-center gap-3">
 				<span class="text-sm font-medium text-music-muted">{t().common.instrument}</span>
 				<div class="inline-flex rounded-lg border border-white/10 bg-music-surface p-1">
-					<For each={Object.values(instruments())}>
-						{(item) => (
+					<For each={INSTRUMENT_IDS}>
+						{(id) => (
 							<button
 								type="button"
-								class="rounded-md px-4 py-2 text-sm font-medium transition-colors"
+								class="shrink-0 rounded-md px-4 py-2 text-sm font-medium transition-colors"
 								classList={{
-									'bg-music-accent text-music-on-accent': instrumentId() === item.id,
-									'text-music-muted hover:text-music-text': instrumentId() !== item.id,
+									'bg-music-accent text-music-on-accent': instrumentId() === id,
+									'text-music-muted hover:text-music-text': instrumentId() !== id,
 								}}
-								onClick={() => handleInstrumentChange(item.id)}
+								aria-pressed={instrumentId() === id}
+								onClick={() => setInstrumentId(id)}
 							>
-								{item.label}
+								{instrumentLabels()[id]}
 							</button>
 						)}
 					</For>
 				</div>
 			</div>
 
-			<NoteFinder instrumentId={instrumentId()} locale={props.locale} />
-
-			<NotePositionsGuide instrumentId={instrumentId()} locale={props.locale} />
+			<Show when={instrumentId()} keyed>
+				{(id) => (
+					<>
+						<NoteFinder instrumentId={id} locale={props.locale} />
+						<NotePositionsGuide instrumentId={id} locale={props.locale} />
+					</>
+				)}
+			</Show>
 		</div>
 	);
 }

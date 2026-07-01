@@ -98,7 +98,7 @@ export default function NoteFinder(props: Props) {
 				)}
 			</Show>
 
-			<div class="overflow-x-auto rounded-xl border border-white/10 bg-music-surface/30 p-4 md:p-6">
+			<div class="overflow-x-auto overflow-y-hidden rounded-xl border border-white/10 bg-music-surface/30 p-4 md:p-6">
 				<div class="inline-block min-w-max">
 					<div
 						class="mb-2 grid"
