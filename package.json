@@ -15,11 +15,12 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "stop": "astro stop",
+    "stop": "astro dev stop; rm -rf node_modules/.vite .astro",
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "generate-types": "wrangler types"
+    "generate-types": "wrangler types",
+    "deploy": "wrangler deploy"
   },
   "type": "module",
   "devDependencies": {
