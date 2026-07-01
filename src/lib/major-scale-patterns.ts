@@ -18,40 +18,111 @@ export interface ScalePattern {
 	dots: PatternDot[];
 }
 
-/** Desenho compacto — cordas 6, 5 e 4. */
-const COMPACT_SHAPE: Record<number, number[]> = {
-	5: [3, 5],
-	4: [2, 3, 5],
-	3: [2, 4, 5],
-};
+function returnFrets(initialFret: number, initialString: 1 | 2 | 3 | 4 | 5 | 6): number[][] {
+	const pattern = [
+		[0, 2, 4],
+		[0, 2, 4],
+		[1, 2, 4],
+		[1, 2, 4],
+		[1, 3, 4],
+		[1, 3, 4],
+	];
+	const frets: number[][] = [];
+	for (let i = 6; i > 0; i--) {
+		if (i === 2 && initialString > 2) {
+			initialFret++;
+		}
+		if (i > initialString) {
+			frets.push([]);
+		} else {
+			frets.push(pattern[initialString - i].map((n) => n + initialFret));
+		}
+	}
+	return frets;
+}
 
-/** Desenho estendido — cordas 6 a 1. Si: casa 3 (não 4) por causa da afinação Sol→Si. */
-const EXTENDED_SHAPE: Record<number, number[]> = {
-	5: [3, 5, 7],
-	4: [3, 5, 7],
-	3: [4, 5, 7],
-	2: [4, 5, 7],
-	1: [3, 7, 8],
-	0: [5, 7, 8],
-};
+/** stringIndex 0 = corda 1 (Mi agudo) … stringIndex 5 = corda 6 (Mi grave). */
+function stringNumberFromIndex(stringIndex: number): 1 | 2 | 3 | 4 | 5 | 6 {
+	return (stringIndex + 1) as 1 | 2 | 3 | 4 | 5 | 6;
+}
+
+/** `returnFrets` yields corda 6 … corda 1; map entry i → stringIndex 5 − i. */
+function fretsToDots(fretsByString: number[][]): Omit<PatternDot, 'degree'>[] {
+	const dots: Omit<PatternDot, 'degree'>[] = [];
+	for (let i = 0; i < fretsByString.length; i++) {
+		const stringIndex = 5 - i;
+		for (const fret of fretsByString[i]) {
+			dots.push({ stringIndex, fret });
+		}
+	}
+	return dots;
+}
 
 const DEFAULT_ROOT = { stringIndex: 5, fret: 3 };
-const G_STRING = 2;
-const B_STRING = 1;
 
 const OPEN_MIDI = [64, 59, 55, 50, 45, 40];
 const MAJOR_INTERVALS = [0, 2, 4, 5, 7, 9, 11];
+
+function pitchClassFromPosition(stringIndex: number, fret: number): number {
+	return ((OPEN_MIDI[stringIndex] + fret) % 12 + 12) % 12;
+}
+
+function intervalFromRoot(
+	stringIndex: number,
+	fret: number,
+	root: { stringIndex: number; fret: number },
+): number {
+	const notePc = pitchClassFromPosition(stringIndex, fret);
+	const rootPc = pitchClassFromPosition(root.stringIndex, root.fret);
+	return (notePc - rootPc + 12) % 12;
+}
+
+function assignScaleDegrees(
+	dots: Omit<PatternDot, 'degree'>[],
+	root: { stringIndex: number; fret: number },
+): PatternDot[] {
+	return dots.map((dot) => {
+		const interval = intervalFromRoot(dot.stringIndex, dot.fret, root);
+		const degreeIndex = MAJOR_INTERVALS.indexOf(interval);
+		const degree = degreeIndex >= 0 ? degreeIndex + 1 : 0;
+		return { ...dot, degree: degree === 0 ? 8 : degree };
+	});
+}
+
+function buildPatternDots(
+	root: { stringIndex: number; fret: number },
+	maxStrings?: number,
+): PatternDot[] {
+	const initialString = stringNumberFromIndex(root.stringIndex);
+	const frets = returnFrets(root.fret, initialString);
+	const dots: Omit<PatternDot, 'degree'>[] = [];
+	let stringsAdded = 0;
+
+	for (let i = 0; i < frets.length; i++) {
+		const stringFrets = frets[i];
+		if (stringFrets.length === 0) continue;
+		if (maxStrings !== undefined && stringsAdded >= maxStrings) break;
+
+		const stringIndex = 5 - i;
+		for (const fret of stringFrets) {
+			dots.push({ stringIndex, fret });
+		}
+		stringsAdded++;
+	}
+
+	return assignScaleDegrees(dots, root);
+}
 
 const BASE_PATTERNS: Record<ScalePatternId, Omit<ScalePattern, 'label' | 'description'>> = {
 	compact: {
 		id: 'compact',
 		defaultRoot: DEFAULT_ROOT,
-		dots: assignScaleDegrees(buildDots(COMPACT_SHAPE), DEFAULT_ROOT),
+		dots: buildPatternDots(DEFAULT_ROOT, 3),
 	},
 	extended: {
 		id: 'extended',
 		defaultRoot: DEFAULT_ROOT,
-		dots: assignScaleDegrees(buildDots(EXTENDED_SHAPE), DEFAULT_ROOT),
+		dots: buildPatternDots(DEFAULT_ROOT),
 	},
 };
 
@@ -80,112 +151,12 @@ export function getMajorScalePatterns(locale: Locale): Record<ScalePatternId, Sc
 	};
 }
 
-function buildDots(shape: Record<number, number[]>): Omit<PatternDot, 'degree'>[] {
-	const dots: Omit<PatternDot, 'degree'>[] = [];
-	for (let s = 5; s >= 0; s--) {
-		for (const f of shape[s] ?? []) {
-			dots.push({ stringIndex: s, fret: f });
-		}
-	}
-	return dots;
-}
-
-/**
- * Ajuste de 1 casa ao cruzar a região Sol→Si (afinação em terça).
- * Cordas com índice ≤ 1 = Si e Mi agudo.
- */
-function gBCrossingFretAdjustment(fromString: number, toString: number): number {
-	if (fromString === toString) return 0;
-
-	const step = fromString < toString ? 1 : -1;
-	let adjustment = 0;
-
-	for (let s = fromString; s !== toString; s += step) {
-		const next = s + step;
-		if (step === -1 && s === G_STRING && next === B_STRING) {
-			adjustment += 1;
-		}
-		if (step === 1 && s === B_STRING && next === G_STRING) {
-			adjustment -= 1;
-		}
-	}
-
-	return adjustment;
-}
-
-function pitchClassFromPosition(stringIndex: number, fret: number): number {
-	return ((OPEN_MIDI[stringIndex] + fret) % 12 + 12) % 12;
-}
-
-function intervalFromRoot(stringIndex: number, fret: number, root: { stringIndex: number; fret: number }): number {
-	const notePc = pitchClassFromPosition(stringIndex, fret);
-	const rootPc = pitchClassFromPosition(root.stringIndex, root.fret);
-	return (notePc - rootPc + 12) % 12;
-}
-
-/** Localiza a casa cuja altura corresponde ao intervalo desejado, preferindo a mais próxima da posição esperada. */
-function findFretForInterval(
-	stringIndex: number,
-	interval: number,
-	root: { stringIndex: number; fret: number },
-	preferredFret: number,
-	maxFret = 12,
-): number {
-	const rootPc = pitchClassFromPosition(root.stringIndex, root.fret);
-	const targetPc = (rootPc + interval) % 12;
-
-	let best = preferredFret;
-	let bestDist = Infinity;
-
-	for (let f = 0; f <= maxFret; f++) {
-		if (pitchClassFromPosition(stringIndex, f) !== targetPc) continue;
-		const dist = Math.abs(f - preferredFret);
-		if (dist < bestDist) {
-			bestDist = dist;
-			best = f;
-		}
-	}
-
-	return best;
-}
-
-function assignScaleDegrees(
-	dots: Omit<PatternDot, 'degree'>[],
-	root: { stringIndex: number; fret: number },
-): PatternDot[] {
-	return dots.map((dot) => {
-		const interval = intervalFromRoot(dot.stringIndex, dot.fret, root);
-		const degreeIndex = MAJOR_INTERVALS.indexOf(interval);
-		const degree = degreeIndex >= 0 ? degreeIndex + 1 : 0;
-		return { ...dot, degree: degree === 0 ? 8 : degree };
-	});
-}
-
 export function getPatternDotsAtRoot(
 	pattern: ScalePattern,
 	root: { stringIndex: number; fret: number },
 ): PatternDot[] {
-	const dString = root.stringIndex - pattern.defaultRoot.stringIndex;
-	const dFret = root.fret - pattern.defaultRoot.fret;
-
-	const moved: Omit<PatternDot, 'degree'>[] = [];
-
-	for (const dot of pattern.dots) {
-		const newString = dot.stringIndex + dString;
-		if (newString < 0 || newString > 5) continue;
-
-		const interval = intervalFromRoot(dot.stringIndex, dot.fret, pattern.defaultRoot);
-		const crossingAdj = gBCrossingFretAdjustment(dot.stringIndex, newString);
-		const preferredFret = dot.fret + dFret + crossingAdj;
-		const newFret = findFretForInterval(newString, interval, root, preferredFret);
-
-		moved.push({
-			stringIndex: newString,
-			fret: newFret,
-		});
-	}
-
-	return assignScaleDegrees(moved, root);
+	const maxStrings = pattern.id === 'compact' ? 3 : undefined;
+	return buildPatternDots(root, maxStrings);
 }
 
 export function isDotInBounds(
