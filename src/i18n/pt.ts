@@ -157,6 +157,11 @@ export const pt: Translations = {
 			body: 'Leia o método do início ao fim ou explore as ferramentas visuais. O objetivo é o mesmo: fazer a teoria musical virar memória muscular o mais rápido possível.',
 			button: 'Ler o método completo',
 		},
+		portfolio: {
+			title: 'Conheça também meu trabalho',
+			body: 'Este método e site foram criados por {author}. Visite meu portfólio para ver outros projetos e entrar em contato.',
+			button: 'Visitar portfólio',
+		},
 	},
 	method: {
 		title: 'Método Referência Simplifica',

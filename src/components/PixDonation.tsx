@@ -2,7 +2,7 @@ import { createSignal, onMount } from 'solid-js';
 
 import { getTranslations, type Locale } from '../i18n';
 import { PIX_KEY, PIX_MERCHANT_CITY, PIX_MERCHANT_NAME } from '../data/donation';
-import { SITE_AUTHOR } from '../data/site';
+import AuthorMention from './AuthorMention';
 
 interface Props {
 	locale: Locale;
@@ -82,7 +82,9 @@ export default function PixDonation(props: Props) {
 				{copied() ? d().copied : d().copy}
 			</button>
 
-			<p class="text-music-muted">{d().voluntary.replace('{author}', SITE_AUTHOR)}</p>
+			<p class="text-music-muted">
+				<AuthorMention template={d().voluntary} />
+			</p>
 			<p class="sr-only" aria-live="polite">
 				{copied() ? d().copiedSr : ''}
 			</p>

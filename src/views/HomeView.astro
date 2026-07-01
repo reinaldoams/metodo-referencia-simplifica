@@ -1,7 +1,10 @@
 ---
 import PixDonation from '../components/PixDonation.tsx';
+import AuthorLink from '../components/AuthorLink.astro';
+import AuthorMention from '../components/AuthorMention.astro';
+import PortfolioInvite from '../components/PortfolioInvite.astro';
 import { PIX_KEY } from '../data/donation';
-import { SITE_AUTHOR } from '../data/site';
+import { SITE_AUTHOR_PORTFOLIO_URL } from '../data/site';
 import { getTranslations, localePath, type Locale } from '../i18n';
 
 const locale = (Astro.currentLocale ?? 'pt') as Locale;
@@ -32,6 +35,7 @@ const home = t.home as {
 		pages: Array<{ href: string; label: string; tag: string; description: string }>;
 	};
 	cta: { title: string; body: string; button: string };
+	portfolio: { title: string; body: string; button: string };
 };
 const donation = t.donation;
 ---
@@ -58,8 +62,7 @@ const donation = t.donation;
 	</p>
 	<h1 class="relative mb-4 leading-tight">{home.hero.title}</h1>
 	<p class="relative mx-auto mt-4 max-w-xl text-sm text-music-muted md:text-base mb-6">
-		{t.author.by}{' '}
-		<strong class="font-medium text-music-text">{SITE_AUTHOR}</strong>
+		{t.author.by} <AuthorLink />
 	</p>
 	<p class="relative mx-auto mb-2 max-w-2xl text-music-muted">{home.hero.tagline}</p>
 	<p class="relative mx-auto max-w-xl text-music-muted">{home.hero.subtitle}</p>
@@ -168,7 +171,7 @@ const donation = t.donation;
 <section class="mt-12 rounded-2xl border border-music-accent/20 bg-music-surface/40 px-8 py-10 md:px-10">
 	<div class="mx-auto max-w-2xl text-center">
 		<h2 class="mb-3 text-2xl md:text-3xl">{donation.sectionTitle}</h2>
-		<p class="text-music-muted">{donation.freeBody.replace('{author}', SITE_AUTHOR)}</p>
+		<p class="text-music-muted"><AuthorMention template={donation.freeBody} /></p>
 		<p class="mt-4 text-music-muted">{donation.gratitude}</p>
 		<details class="group mt-6 text-center">
 			<summary
@@ -206,3 +209,10 @@ const donation = t.donation;
 		{home.cta.button}
 	</a>
 </section>
+
+<PortfolioInvite
+	title={home.portfolio.title}
+	body={home.portfolio.body}
+	button={home.portfolio.button}
+	url={SITE_AUTHOR_PORTFOLIO_URL}
+/>

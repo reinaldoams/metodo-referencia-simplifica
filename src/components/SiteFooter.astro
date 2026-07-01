@@ -1,6 +1,6 @@
 ---
 import { getTranslations, type Locale } from '../i18n';
-import { SITE_AUTHOR } from '../data/site';
+import AuthorMention from './AuthorMention.astro';
 
 interface Props {
 	locale?: Locale;
@@ -8,11 +8,10 @@ interface Props {
 
 const locale = (Astro.props.locale ?? Astro.currentLocale ?? 'pt') as Locale;
 const t = getTranslations(locale);
-const [beforeAuthor, afterAuthor] = t.footer.split('{author}');
 ---
 
 <footer class="border-t border-white/10 bg-music-surface/40 px-6 py-8 text-center text-base text-music-muted">
 	<p>
-		{beforeAuthor}<strong class="font-medium text-music-text">{SITE_AUTHOR}</strong>{afterAuthor}
+		<AuthorMention template={t.footer} />
 	</p>
 </footer>

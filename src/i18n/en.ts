@@ -172,6 +172,11 @@ export const en: Translations = {
 			body: 'Read the method from start to finish or explore the visual tools. The goal is the same: turn music theory into muscle memory as quickly as possible.',
 			button: 'Read the full method',
 		},
+		portfolio: {
+			title: 'Check out my other work',
+			body: 'This method and site were created by {author}. Visit my portfolio to see more projects and get in touch.',
+			button: 'Visit portfolio',
+		},
 	},
 	method: {
 		title: 'Reference Method Simplified',

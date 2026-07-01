@@ -1,6 +1,6 @@
 ---
+import AuthorLink from '../components/AuthorLink.astro';
 import EncontradorDeNotas from '../components/EncontradorDeNotas';
-import { SITE_AUTHOR } from '../data/site';
 import { getTranslations, type Locale } from '../i18n';
 
 const locale = (Astro.currentLocale ?? 'pt') as Locale;
@@ -17,8 +17,7 @@ const page = t.noteFinderPage as {
 <div class="mb-10 max-w-3xl space-y-4">
 	<h1>{page.title}</h1>
 	<p class="mt-3 text-base text-music-muted md:text-lg">
-		{t.author.toolBy}{' '}
-		<strong class="text-music-text">{SITE_AUTHOR}</strong>
+		{t.author.toolBy} <AuthorLink />
 	</p>
 	<p class="text-music-muted">{page.p1}</p>
 	<p class="text-music-muted">{page.p2}</p>
